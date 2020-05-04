@@ -4,6 +4,7 @@ public abstract class BaseObjectScene : MonoBehaviour
 {
     #region Fields
 
+    public string Name;
     public Rigidbody Rigidbody { get; private set; }
     public Transform Transform { get; private set; }
 
@@ -26,6 +27,7 @@ public abstract class BaseObjectScene : MonoBehaviour
 
     protected virtual void Awake()
     {
+        Name = name;
         Rigidbody = GetComponent<Rigidbody>();
         Transform = transform;
     }
