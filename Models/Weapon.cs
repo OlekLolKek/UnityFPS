@@ -51,7 +51,12 @@ public class Weapon : BaseObjectScene
 
     protected void ReadyShoot()
     {
+        _isReady = true;
+    }
 
+    protected void AddMag(Magazine mag)
+    {
+        _mags.Enqueue(mag);
     }
 
     #endregion
