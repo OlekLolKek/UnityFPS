@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ammunition : BaseObjectScene
+public abstract class Ammunition : BaseObjectScene
 {
     #region Fields
 
@@ -19,7 +19,7 @@ public class Ammunition : BaseObjectScene
 
     #region UnityMethods
 
-    private void Awake()
+    protected override void Awake()
     {
         base.Awake();
         _currentDamage = _baseDamage;
