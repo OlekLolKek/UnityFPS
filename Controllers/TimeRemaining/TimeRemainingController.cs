@@ -15,7 +15,7 @@ public sealed class TimeRemainingController : IExecute
 
     public TimeRemainingController()
     {
-        _timeRemainings = TimeRemainingExtensions.TimeRemaining;
+        _timeRemainings = TimeRemainingExtensions.TimeRemainings;
     }
 
     #endregion

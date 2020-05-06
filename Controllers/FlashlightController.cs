@@ -18,13 +18,13 @@ public sealed class FlashlightController : BaseController, IExecute, IInitializa
         UIInterface.FlashlightUIBar.SetActive(false);
     }
 
-    public override void On()
+    public override void On(params BaseObjectScene[] flashlight)
     {
         if (IsActive)
         { 
             return; 
         }
-        if (flaslight.Length > 0)
+        if (flashlight.Length > 0)
         {
             _flashlightModel = flashlight[0] as FlashlightModel;
         }
@@ -32,7 +32,7 @@ public sealed class FlashlightController : BaseController, IExecute, IInitializa
         { 
             return; 
         }
-        base.On(FlashlightModel);
+        base.On(_flashlightModel);
         _flashlightModel.Switch(FlashlightActiveType.On);
         UIInterface.LightUIText.SetActive(true);
         UIInterface.FlashlightUIBar.SetActive(true);
@@ -53,8 +53,6 @@ public sealed class FlashlightController : BaseController, IExecute, IInitializa
 
     public void Execute()
     {
-        _flashlightUI.Text = _flashlightModel.CurrentBatteryCharge;
-
         if (!IsActive)
         {
             return;

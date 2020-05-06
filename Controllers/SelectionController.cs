@@ -40,7 +40,7 @@ public sealed class SelectionController : BaseController, IExecute
         }
         else if (!_nullString)
         {
-            UIInterface.SelectionObjMessageUi.Text = String.Empty;
+            UIInterface.SelectionObjMessageUI.Text = String.Empty;
             _nullString = true;
             _detectedObj = null;
             _isSelectedObj = false;
