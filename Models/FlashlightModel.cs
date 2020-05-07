@@ -55,6 +55,7 @@ public sealed class FlashlightModel : BaseObjectScene
                 _light.enabled = true;
                 Transform.position = _goFollow.position + _vecOffset;
                 Transform.rotation = _goFollow.rotation;
+                CustomDebug.Log("Типа включился");
                 break;
             case FlashlightActiveType.None:
                 break;

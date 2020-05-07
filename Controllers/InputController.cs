@@ -30,7 +30,7 @@ public sealed class InputController : BaseController, IExecute
         if (!IsActive) return;
         if (Input.GetKeyDown(_switchFlashlight))
         {
-            ServiceLocator.Resolve<FlashlightController>().Switch();
+            ServiceLocator.Resolve<FlashlightController>().Switch(ServiceLocator.Resolve<Inventory>().Flashlight);
         }
         //todo реализовать выбор оружия по колесу мыши
 
@@ -45,6 +45,12 @@ public sealed class InputController : BaseController, IExecute
             {
                 ServiceLocator.Resolve<WeaponController>().Fire();
             }
+        }
+
+        if (Input.GetKeyDown(_cancel))
+        {
+            ServiceLocator.Resolve<WeaponController>().Off();
+            ServiceLocator.Resolve<FlashlightController>().Off();
         }
 
         if (Input.GetKeyDown(_reloadMag))

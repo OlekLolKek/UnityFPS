@@ -45,7 +45,7 @@
     {
         if (!IsActive)
         {
-            On();
+            On(obj);
         }
         else
         {
