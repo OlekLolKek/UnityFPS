@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 
 public abstract class Weapon : BaseObjectScene
@@ -12,14 +13,17 @@ public abstract class Weapon : BaseObjectScene
     public AmmunitionType[] AmmunitionTypes = { AmmunitionType.Bullet };
 
     [SerializeField] protected Transform _barrel;
+    [SerializeField] protected AudioClipPlayable _shotClip;
     [SerializeField] protected float _force = 999.0f;
     [SerializeField] protected float _rechargeTime = 0.2f;
-    [SerializeField] private int _magSize = 30;
-    [SerializeField] private int _countMag = 5;
+    [SerializeField] protected AudioSource _audioSource;
+    [SerializeField] protected int _magSize = 30;
+    [SerializeField] protected int _countMag = 5;
 
-    private bool _isInAutomaticMode;
+    private bool _isInAutomaticMode = true;
 
     private Queue<Magazine> _mags = new Queue<Magazine>();
+
 
     protected bool _isReady = true;
     protected ITimeRemaining _timeRemaining;
@@ -31,7 +35,8 @@ public abstract class Weapon : BaseObjectScene
 
     public int CountMag => _mags.Count;
 
-    public bool IsInAutomaticMode => _isInAutomaticMode;
+    public bool IsInAutomaticMode { get => _isInAutomaticMode; set => _isInAutomaticMode = value; }
+
 
     #endregion
 

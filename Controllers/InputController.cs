@@ -49,6 +49,7 @@ public sealed class InputController : BaseController, IExecute
         {
             if (ServiceLocator.Resolve<WeaponController>().IsActive)
             {
+                Camera.main.GetComponent<AudioSource>().Play();
                 ServiceLocator.Resolve<WeaponController>().SwitchMode();
             }
         }
