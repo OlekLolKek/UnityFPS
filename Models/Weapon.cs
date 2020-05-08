@@ -11,18 +11,17 @@ public abstract class Weapon : BaseObjectScene
 
     public AmmunitionType[] AmmunitionTypes = { AmmunitionType.Bullet };
 
-
     [SerializeField] protected Transform _barrel;
     [SerializeField] protected float _force = 999.0f;
     [SerializeField] protected float _rechargeTime = 0.2f;
+    [SerializeField] private int _magSize = 30;
+    [SerializeField] private int _countMag = 5;
+
 
     private Queue<Magazine> _mags = new Queue<Magazine>();
 
     protected bool _isReady = true;
     protected ITimeRemaining _timeRemaining;
-
-    private int _magSize = 30;
-    private int _countMag = 5;
 
     #endregion
 
