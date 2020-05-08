@@ -17,6 +17,7 @@ public abstract class Weapon : BaseObjectScene
     [SerializeField] private int _magSize = 30;
     [SerializeField] private int _countMag = 5;
 
+    private bool _isInAutomaticMode;
 
     private Queue<Magazine> _mags = new Queue<Magazine>();
 
@@ -29,6 +30,8 @@ public abstract class Weapon : BaseObjectScene
     #region Properties
 
     public int CountMag => _mags.Count;
+
+    public bool IsInAutomaticMode => _isInAutomaticMode;
 
     #endregion
 
@@ -62,6 +65,12 @@ public abstract class Weapon : BaseObjectScene
     {
         if (CountMag <= 0) return;
         Magazine = _mags.Dequeue();
+    }
+    
+    public void SwitchMode()
+    {
+        if (_isInAutomaticMode) _isInAutomaticMode = false;
+        else _isInAutomaticMode = true;
     }
 
     #endregion

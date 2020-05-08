@@ -8,6 +8,7 @@ public sealed class InputController : BaseController, IExecute
     private KeyCode _switchFlashlight = KeyCode.F;
     private KeyCode _cancel = KeyCode.Escape;
     private KeyCode _reloadMag = KeyCode.R;
+    private KeyCode _switchShootingMode = KeyCode.B;
     private int _mouseButton = (int)MouseButton.LeftButton;
 
     #endregion
@@ -44,11 +45,32 @@ public sealed class InputController : BaseController, IExecute
             SelectWeapon(1);
         }
 
-        if (Input.GetMouseButton(_mouseButton))
+        if (Input.GetKeyDown(_switchShootingMode))
         {
             if (ServiceLocator.Resolve<WeaponController>().IsActive)
             {
-                ServiceLocator.Resolve<WeaponController>().Fire();
+                ServiceLocator.Resolve<WeaponController>().SwitchMode();
+            }
+        }
+
+        if (ServiceLocator.Resolve<WeaponController>().IsInAutomaticMode())
+        {
+            if (Input.GetMouseButton(_mouseButton))
+            {
+                if (ServiceLocator.Resolve<WeaponController>().IsActive)
+                {
+                    ServiceLocator.Resolve<WeaponController>().Fire();
+                }
+            }
+        }
+        else
+        {
+            if (Input.GetMouseButtonDown(_mouseButton))
+            {
+                if (ServiceLocator.Resolve<WeaponController>().IsActive)
+                {
+                    ServiceLocator.Resolve<WeaponController>().Fire();
+                }
             }
         }
 
