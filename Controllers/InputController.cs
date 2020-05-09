@@ -50,6 +50,16 @@ public sealed class InputController : BaseController, IExecute
             SelectWeapon(2);
         }
 
+        if (Input.GetAxis("Mouse ScrollWheel") > 0)
+        {
+            NextWeapon();
+        }
+
+        if (Input.GetAxis("Mouse ScrollWheel") < 0)
+        {
+            PreviousWeapon();
+        }
+
         if (Input.GetKeyDown(_switchShootingMode))
         {
             if (ServiceLocator.Resolve<WeaponController>().IsActive)
@@ -91,11 +101,35 @@ public sealed class InputController : BaseController, IExecute
         }
     }
 
-
     private void SelectWeapon(int i)
     {
         ServiceLocator.Resolve<WeaponController>().Off();
         var tempWeapon = ServiceLocator.Resolve<Inventory>().Weapons[i]; //todo инкапсулировать
+        if (tempWeapon != null)
+        {
+            ServiceLocator.Resolve<Inventory>().ActiveWeapon = i;
+            ServiceLocator.Resolve<WeaponController>().On(tempWeapon);
+        }
+    }
+
+    private void NextWeapon()
+    {
+        ServiceLocator.Resolve<WeaponController>().Off();
+        ServiceLocator.Resolve<Inventory>().NextWeapon();
+        var active = ServiceLocator.Resolve<Inventory>().ActiveWeapon;
+        var tempWeapon = ServiceLocator.Resolve<Inventory>().Weapons[active]; //todo инкапсулировать
+        if (tempWeapon != null)
+        {
+            ServiceLocator.Resolve<WeaponController>().On(tempWeapon);
+        }
+    }
+
+    private void PreviousWeapon()
+    {
+        ServiceLocator.Resolve<WeaponController>().Off();
+        ServiceLocator.Resolve<Inventory>().PreviousWeapon();
+        var active = ServiceLocator.Resolve<Inventory>().ActiveWeapon;
+        var tempWeapon = ServiceLocator.Resolve<Inventory>().Weapons[active]; //todo инкапсулировать
         if (tempWeapon != null)
         {
             ServiceLocator.Resolve<WeaponController>().On(tempWeapon);
