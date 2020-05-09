@@ -15,16 +15,15 @@ public abstract class Weapon : BaseObjectScene
     [SerializeField] Quaternion _bulletRotationMin;
     [SerializeField] Quaternion _bulletRotationMax;
 
-    [SerializeField] protected Transform _barrel;
     [SerializeField] protected AudioClipPlayable _shotClip;
+    [SerializeField] protected Transform _barrel;
+    [SerializeField] protected AudioSource _audioSource;
     [SerializeField] protected float _force = 999.0f;
     [SerializeField] protected float _rechargeTime = 0.2f;
-
-    protected float _WSpreadMin = -0.1f;
-
-    [SerializeField] protected AudioSource _audioSource;
     [SerializeField] protected int _magSize = 30;
     [SerializeField] protected int _countMag = 5;
+    [SerializeField] protected bool _isSwitchable = true;
+    [SerializeField] protected bool _isInAutomaticMode;
 
     private Queue<Magazine> _mags = new Queue<Magazine>();
     protected Quaternion _bulletRotation;
@@ -39,7 +38,7 @@ public abstract class Weapon : BaseObjectScene
 
     public int CountMag => _mags.Count;
 
-    public bool IsInAutomaticMode { get; set; } = true;
+    public bool IsInAutomaticMode { get => _isInAutomaticMode; set => _isInAutomaticMode = value; }
 
 
     #endregion
@@ -87,6 +86,8 @@ public abstract class Weapon : BaseObjectScene
 
     public void SwitchMode()
     {
+        if (!_isSwitchable) return;
+        Camera.main.GetComponent<AudioSource>().Play();
         if (IsInAutomaticMode) IsInAutomaticMode = false;
         else IsInAutomaticMode = true;
     }
