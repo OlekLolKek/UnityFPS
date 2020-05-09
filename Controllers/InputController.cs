@@ -50,6 +50,11 @@ public sealed class InputController : BaseController, IExecute
             SelectWeapon(2);
         }
 
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            SelectWeapon(3);
+        }
+
         if (Input.GetAxis("Mouse ScrollWheel") > 0)
         {
             NextWeapon();
