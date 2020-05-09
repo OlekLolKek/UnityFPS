@@ -54,21 +54,18 @@ public sealed class InputController : BaseController, IExecute
             }
         }
 
-        if (ServiceLocator.Resolve<WeaponController>().IsInAutomaticMode())
+        if (ServiceLocator.Resolve<WeaponController>().IsActive)
         {
-            if (Input.GetMouseButton(_mouseButton))
+            if (ServiceLocator.Resolve<WeaponController>().IsInAutomaticMode())
             {
-                if (ServiceLocator.Resolve<WeaponController>().IsActive)
+                if (Input.GetMouseButton(_mouseButton))
                 {
                     ServiceLocator.Resolve<WeaponController>().Fire();
                 }
             }
-        }
-        else
-        {
-            if (Input.GetMouseButtonDown(_mouseButton))
+            else
             {
-                if (ServiceLocator.Resolve<WeaponController>().IsActive)
+                if (Input.GetMouseButtonDown(_mouseButton))
                 {
                     ServiceLocator.Resolve<WeaponController>().Fire();
                 }
