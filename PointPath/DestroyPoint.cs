@@ -2,7 +2,7 @@
 using System;
 
 
-public class DestroyPoint : MonoBehaviour
+public sealed class DestroyPoint : MonoBehaviour
 {
     #region Fields
 

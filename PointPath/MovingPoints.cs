@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MovingPoints : MonoBehaviour
+public sealed class MovingPoints : MonoBehaviour
 {
     #region Fields
 
@@ -64,7 +63,7 @@ public class MovingPoints : MonoBehaviour
                 var cornersArray = _points.ToArray().Concat(_path.corners);
 
                 _lineRenderer.positionCount = cornersArray.Length;
-                _lineRenderer.SetPosition(cornersArray);
+                _lineRenderer.SetPositions(cornersArray);
             }
         }
 
