@@ -12,7 +12,7 @@ public sealed class LaunchableGrenade : Ammunition
 
         if (setDamage != null)
         {
-            setDamage.CollisionEnter(new InfoCollision(_currentDamage, Rigidbody.velocity));
+            setDamage.OnCollision(new InfoCollision(_currentDamage, Rigidbody.velocity));
         }
 
         DestroyAmmunition();

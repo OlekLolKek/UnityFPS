@@ -1,4 +1,4 @@
 ﻿public interface ICollision
 {
-    void CollisionEnter(InfoCollision info);
+    void OnCollision(InfoCollision info);
 }

@@ -20,7 +20,7 @@ public class Target : MonoBehaviour, ICollision, ISelectObj
 
     #region Methods
 
-    public void CollisionEnter(InfoCollision info)
+    public void OnCollision(InfoCollision info)
     {
         if (_isDead) return;
         if (HP > 0)

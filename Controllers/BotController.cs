@@ -8,7 +8,7 @@ public class BotController : BaseController, IExecute, IInitialization
     #region Fields
 
     private readonly int _countBot = 5;
-    private readonly HashSet<Bot> _botList = new HashSet<Bot>();
+    private readonly List<Bot> _botList = new List<Bot>();
 
     #endregion
 
@@ -47,6 +47,20 @@ public class BotController : BaseController, IExecute, IInitialization
         }
 
         bot.OnDieChange -= RemoveBotToList;
+        _botList.Remove(bot);
+    }
+
+    public void Execute()
+    {
+        if (!IsActive)
+        {
+            return;
+        }
+
+        for (var i = 0; i < _botList.Count; i++)
+        {
+            _botList[i].Execute();
+        }
     }
 
     #endregion
