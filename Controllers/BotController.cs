@@ -20,8 +20,8 @@ public class BotController : BaseController, IExecute, IInitialization
         for (var index = 0; index < _countBot; index++)
         {
             var tempBot = Object.Instantiate(ServiceLocatorMonoBehaviour.GetService<Reference>().Bot,
-                Patrol.GenericPoint(ServiceLocatorMonoBehaviour.GetService<CharacterController>().transform,
-                Quaternion.identity));
+                Patrol.GenericPoint(ServiceLocatorMonoBehaviour.GetService<CharacterController>().transform),
+                Quaternion.identity);
 
             tempBot.Agent.avoidancePriority = index;
             tempBot.Target = ServiceLocatorMonoBehaviour.GetService<CharacterController>().transform;
