@@ -1,16 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 using UnityEngine.AI;
 
-public sealed class Bot : BaseObjectScene
+
+public sealed class Bot : BaseObjectScene, IExecute
 {
     #region Fields
 
     public float HP = 100;
     public Vision Vision;
-    public Weapon weapon;
+    public Weapon Weapon;
 
     private float _waitTime = 3;
     private StateBot _stateBot;
@@ -92,6 +91,58 @@ public sealed class Bot : BaseObjectScene
 
 
     #region Methods
+
+    public void Execute()
+    {
+        if (StateBot == StateBot.Dead) return;
+
+        if (StateBot != StateBot.Detected)
+        {
+            if (!Agent.hasPath)
+            {
+                if (StateBot != StateBot.Inspection)
+                {
+                    if (StateBot != StateBot.Patrol)
+                    {
+                        StateBot = StateBot.Patrol;
+                        _point = Patrol.GenericPoint(transform);
+                        MovePoint(_point);
+                        Agent.stoppingDistance = 0;
+                    }
+                    else
+                    {
+                        if ((_point - transform.position).sqrMagnitude <= 1)
+                        {
+                            StateBot = StateBot.Inspection;
+                            _timeRemaining.AddTimeRemaining();
+                        }
+                    }
+                }
+            }
+
+            if (Vision.VisionM(transform, Target))
+            {
+                StateBot = StateBot.Detected;
+            }
+        }
+        else
+        {
+            if (Math.Abs(Agent.stoppingDistance - _stoppingDistance) > Mathf.Epsilon)
+            {
+                Agent.stoppingDistance = _stoppingDistance;
+            }
+            if (Vision.VisionM(transform, Target))
+            {
+                Weapon.Fire();
+            }
+            else
+            {
+                MovePoint(Target.position);
+            }
+
+            //todo потеря персонажа
+        }
+    }
 
     private void ResetStateBot()
     {
