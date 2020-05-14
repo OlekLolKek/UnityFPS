@@ -15,7 +15,8 @@ public sealed class HeadBot : MonoBehaviour, ICollision
 
     public void OnCollision(InfoCollision info)
     {
-        OnApplyDamageChange?.Invoke(new InfoCollision(info.Damage * 500, info.Contact, info.ObjCollision, info.Dir));
+        OnApplyDamageChange?.Invoke(new InfoCollision(info.Damage * 500, 
+            info.Contact, info.ObjCollision, info.Dir));
     }
 
     #endregion
