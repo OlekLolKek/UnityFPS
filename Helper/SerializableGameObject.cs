@@ -2,6 +2,7 @@
 using UnityEngine;
 
 
+[Serializable]
 public struct SerializableGameObject
 {
     #region Fields
