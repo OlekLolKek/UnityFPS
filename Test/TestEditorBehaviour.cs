@@ -1,18 +1,39 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Threading;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class TestEditorBehaviour : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    #region Fields
+
+    public float Count = 42;
+    public int Step = 2;
+
+    #endregion
+
+
+    #region UnityMethods
+
+    private void Start()
     {
-        
+#if UNITY_EDITOR
+
+        for (var i = 0; i < Count; i++)
+        {
+            EditorUtility.DisplayProgressBar("Загрузка", $"Проценты {i}", i / Count);
+            Thread.Sleep(Step * 100);
+        }
+        EditorUtility.ClearProgressBar();
+        var isPressed = EditorUtility.DisplayDialog("Вопрос", @"А оно тебе нужно ? ", "Ага", "Или нет");
+        if (isPressed)
+        {
+            EditorApplication.isPaused = true;
+        }
+
+#endif
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    #endregion
 }
