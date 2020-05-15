@@ -2,12 +2,11 @@
 using UnityEngine.UI;
 
 
-public sealed class FlashlightUI : MonoBehaviour
+public sealed class FlashlightUIText : MonoBehaviour
 {
     #region Fields
 
-    private Text _batteryText;
-    //todo image
+    private Text _text;
 
     #endregion
 
@@ -16,7 +15,7 @@ public sealed class FlashlightUI : MonoBehaviour
 
     public float Text
     {
-        set => _batteryText.text = $"{value:0.0}";
+        set => _text.text = $"{value:0.0}";
     }
 
     #endregion
@@ -26,12 +25,12 @@ public sealed class FlashlightUI : MonoBehaviour
 
     private void Awake()
     {
-        _batteryText = GetComponent<Text>();
+        _text = GetComponent<Text>();
     }
 
     public void SetActive(bool value)
     {
-        _batteryText.gameObject.SetActive(value);
+        _text.gameObject.SetActive(value);
     }
 
     #endregion

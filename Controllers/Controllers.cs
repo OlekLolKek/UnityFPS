@@ -17,25 +17,27 @@ public sealed class Controllers : IInitialization
 
     public Controllers()
     {
-        IMotor motor = default;
-        if (Application.platform == RuntimePlatform.PS4)
-        {
-            //
-        }
-        else
-        {
-            motor = new UnitMotor(ServiceLocatorMonoBehaviour.GetService<CharacterController>());
-        }
+        IMotor motor = new UnitMotor(ServiceLocatorMonoBehaviour.GetService<CharacterController>());
+
+        ServiceLocator.SetService(new TimeRemainingController());
+        ServiceLocator.SetService(new Inventory());
         ServiceLocator.SetService(new PlayerController(motor));
         ServiceLocator.SetService(new FlashlightController());
+        ServiceLocator.SetService(new WeaponController());
         ServiceLocator.SetService(new InputController());
-        _executeControllers = new IExecute[3];
+        ServiceLocator.SetService(new SelectionController());
 
-        _executeControllers[0] = ServiceLocator.Resolve<PlayerController>();
+        _executeControllers = new IExecute[5];
 
-        _executeControllers[1] = ServiceLocator.Resolve<FlashlightController>();
+        _executeControllers[0] = ServiceLocator.Resolve<TimeRemainingController>();
 
-        _executeControllers[2] = ServiceLocator.Resolve<InputController>();
+        _executeControllers[1] = ServiceLocator.Resolve<PlayerController>();
+
+        _executeControllers[2] = ServiceLocator.Resolve<FlashlightController>();
+
+        _executeControllers[3] = ServiceLocator.Resolve<InputController>();
+
+        _executeControllers[4] = ServiceLocator.Resolve<SelectionController>();
     }
 
     #endregion
@@ -53,6 +55,8 @@ public sealed class Controllers : IInitialization
             }
         }
 
+        ServiceLocator.Resolve<Inventory>().Initialization();
+        ServiceLocator.Resolve<SelectionController>().On();
         ServiceLocator.Resolve<PlayerController>().On();
         ServiceLocator.Resolve<InputController>().On();
     }

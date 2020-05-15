@@ -1,8 +1,25 @@
-﻿public class BaseController
+﻿public abstract class BaseController
 {
     #region Fields
 
+    protected UIInterface UIInterface;
+
+    #endregion
+
+
+    #region Properties
+
     public bool IsActive { get; private set; }
+
+    #endregion
+
+
+    #region ClassLifeCycles
+
+    protected BaseController()
+    {
+        UIInterface = new UIInterface();
+    }
 
     #endregion
 
@@ -24,11 +41,11 @@
         IsActive = false;
     }
 
-    public void Switch()
+    public void Switch(params BaseObjectScene[] obj)
     {
         if (!IsActive)
         {
-            On();
+            On(obj);
         }
         else
         {

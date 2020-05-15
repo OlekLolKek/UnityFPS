@@ -1,24 +1,29 @@
 ﻿using System;
 using UnityEngine;
 
+
 public sealed class FlashlightModel : BaseObjectScene
 {
-    #region PrivateData
+    #region Fields
+
+    [SerializeField] private float _rotationSpeed = 11.0f;
+    [SerializeField] private float _maxBatteryCharge = 10.0f;
+    [SerializeField] private float _intensity = 10.0f;
 
     private Vector3 _vecOffset;
+    private Light _light;
+    private Transform _goFollow;
+    private float _share;
+    private float _takeAwayTheIntensity;
 
     #endregion
 
 
-    #region Fields
+    #region Properties
 
-    public float BatteryChargeCurrent { get; private set; }
+    public float Charge => CurrentBatteryCharge / _maxBatteryCharge;
 
-    [SerializeField] private float _rotationSpeed = 11;
-    [SerializeField] private float _batteryChargeMax = 10;
-
-    private Light _light;
-    private Transform _goFollow;
+    public float CurrentBatteryCharge { get; private set; }
 
     #endregion
 
@@ -31,7 +36,10 @@ public sealed class FlashlightModel : BaseObjectScene
         _light = GetComponent<Light>();
         _goFollow = Camera.main.transform;
         _vecOffset = Transform.position - _goFollow.position;
-        BatteryChargeCurrent = _batteryChargeMax;
+        CurrentBatteryCharge = _maxBatteryCharge;
+        _light.intensity = _intensity;
+        _share = _maxBatteryCharge / 4.0f;
+        _takeAwayTheIntensity = _intensity / (_maxBatteryCharge * 100.0f);
     }
 
     #endregion
@@ -47,6 +55,9 @@ public sealed class FlashlightModel : BaseObjectScene
                 _light.enabled = true;
                 Transform.position = _goFollow.position + _vecOffset;
                 Transform.rotation = _goFollow.rotation;
+                CustomDebug.Log("Типа включился");
+                break;
+            case FlashlightActiveType.None:
                 break;
             case FlashlightActiveType.Off:
                 _light.enabled = false;
@@ -64,17 +75,37 @@ public sealed class FlashlightModel : BaseObjectScene
 
     public bool EditBatteryCharge()
     {
-        if (BatteryChargeCurrent > 0 && _light.enabled)
+        if (CurrentBatteryCharge > 0)
         {
-            BatteryChargeCurrent -= Time.deltaTime;
+            CurrentBatteryCharge -= Time.deltaTime;
+
+            if (CurrentBatteryCharge < _share)
+            {
+                _light.enabled = UnityEngine.Random.Range(0, 100) >= UnityEngine.Random.Range(0, 10);
+            }
+            else
+            {
+                _light.intensity -= _takeAwayTheIntensity;
+            }
             return true;
         }
-        else if (!_light.enabled && BatteryChargeCurrent < _batteryChargeMax)
+
+        return false;
+    }
+
+    public bool LowBattery()
+    {
+        return CurrentBatteryCharge <= _maxBatteryCharge / 2.0f;
+    }
+
+    public bool RechargeBattery()
+    {
+        if (CurrentBatteryCharge < _maxBatteryCharge)
         {
-            BatteryChargeCurrent += Time.deltaTime / 3;
-            return false;
+            CurrentBatteryCharge += Time.deltaTime;
+            return true;
         }
-        else return false;
+        return false;
     }
 
     #endregion
