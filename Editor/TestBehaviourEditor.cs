@@ -12,7 +12,7 @@ public class TestBehaviourEditor : UnityEditor.Editor
     #endregion
 
 
-    #region Methods
+    #region UnityMethods
 
     public override void OnInspectorGUI()
     {

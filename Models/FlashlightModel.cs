@@ -6,9 +6,9 @@ public sealed class FlashlightModel : BaseObjectScene
 {
     #region Fields
 
-    [SerializeField] private float _rotationSpeed = 11.0f;
-    [SerializeField] private float _maxBatteryCharge = 10.0f;
-    [SerializeField] private float _intensity = 10.0f;
+    public  float RotationSpeed = 11.0f;
+    public float MaxBatteryCharge = 10.0f;
+    public float Intensity = 10.0f;
 
     private Vector3 _vecOffset;
     private Light _light;
@@ -21,7 +21,7 @@ public sealed class FlashlightModel : BaseObjectScene
 
     #region Properties
 
-    public float Charge => CurrentBatteryCharge / _maxBatteryCharge;
+    public float Charge => CurrentBatteryCharge / MaxBatteryCharge;
 
     public float CurrentBatteryCharge { get; private set; }
 
@@ -36,10 +36,10 @@ public sealed class FlashlightModel : BaseObjectScene
         _light = GetComponent<Light>();
         _goFollow = Camera.main.transform;
         _vecOffset = Transform.position - _goFollow.position;
-        CurrentBatteryCharge = _maxBatteryCharge;
-        _light.intensity = _intensity;
-        _share = _maxBatteryCharge / 4.0f;
-        _takeAwayTheIntensity = _intensity / (_maxBatteryCharge * 100.0f);
+        CurrentBatteryCharge = MaxBatteryCharge;
+        _light.intensity = Intensity;
+        _share = MaxBatteryCharge / 4.0f;
+        _takeAwayTheIntensity = Intensity / (MaxBatteryCharge * 100.0f);
     }
 
     #endregion
@@ -70,7 +70,7 @@ public sealed class FlashlightModel : BaseObjectScene
     public void Rotation()
     {
         Transform.position = _goFollow.position + _vecOffset;
-        Transform.rotation = Quaternion.Lerp(Transform.rotation, _goFollow.rotation, _rotationSpeed * Time.deltaTime);
+        Transform.rotation = Quaternion.Lerp(Transform.rotation, _goFollow.rotation, RotationSpeed * Time.deltaTime);
     }
 
     public bool EditBatteryCharge()
@@ -95,12 +95,12 @@ public sealed class FlashlightModel : BaseObjectScene
 
     public bool LowBattery()
     {
-        return CurrentBatteryCharge <= _maxBatteryCharge / 2.0f;
+        return CurrentBatteryCharge <= MaxBatteryCharge / 2.0f;
     }
 
     public bool RechargeBattery()
     {
-        if (CurrentBatteryCharge < _maxBatteryCharge)
+        if (CurrentBatteryCharge < MaxBatteryCharge)
         {
             CurrentBatteryCharge += Time.deltaTime;
             return true;
