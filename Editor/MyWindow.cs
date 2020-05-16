@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using System.Collections.Generic;
 
 
 public class MyWindow : EditorWindow
@@ -10,8 +11,11 @@ public class MyWindow : EditorWindow
     public string NameObject = "Hello World!";
     public bool IsGroupEnabled;
     public bool RandomColor = true;
+    public bool RandomName = true;
     public int CountObject = 1;
     public float Radius = 10;
+
+    private string _name;
 
     #endregion
 
@@ -26,6 +30,7 @@ public class MyWindow : EditorWindow
         NameObject = EditorGUILayout.TextField("Имя объекта", NameObject);
         IsGroupEnabled = EditorGUILayout.BeginToggleGroup("Дополнительные настройки", IsGroupEnabled);
         RandomColor = EditorGUILayout.Toggle("Случайный цвет", RandomColor);
+        RandomName = EditorGUILayout.Toggle("Случайное имя", RandomName);
         CountObject = EditorGUILayout.IntSlider("Количество объектов", CountObject, 1, 100);
         Radius = EditorGUILayout.Slider("Радиус окружности", Radius, 10, 50);
         EditorGUILayout.EndToggleGroup();
@@ -40,7 +45,10 @@ public class MyWindow : EditorWindow
                     Vector3 pos = new Vector3(Mathf.Cos(angle), 0,
                                               Mathf.Sin(angle)) * Radius;
                     GameObject temp = Instantiate(ObjectInstantiate, pos, Quaternion.identity);
-                    temp.name = NameObject + "(" + i + ")";
+                    if (RandomName)
+                        temp.name = GenerateName(5);
+                    else
+                        temp.name = NameObject + "(" + i + ")";
                     temp.transform.parent = root.transform;
                     var tempRenderer = temp.GetComponent<Renderer>();
                     if (tempRenderer && RandomColor)
@@ -50,7 +58,29 @@ public class MyWindow : EditorWindow
                 }
             }
         }
+        if (GUILayout.Button("Удалить объекты Root"))
+        {
+            if (GameObject.Find("Root") != null)
+            {
+                DestroyImmediate(GameObject.Find("Root"));
+            }
+        }
     }
 
+    #endregion
+
+
+    #region Methods
+
+    private static string GenerateName(int length)
+    {
+        string name = string.Empty;
+        for (int i = 0; i < length; i++)
+        {
+            name += (char)Random.Range(65, 93);
+        }
+        return name;
+    }
+    
     #endregion
 }
