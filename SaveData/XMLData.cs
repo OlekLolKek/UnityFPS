@@ -55,7 +55,28 @@ public class XMLData : IData<SerializableGameObject>
                 {
                     result.Name = Crypto.CryptoXOR(reader.GetAttribute("value"));
                 }
+                key = "PosX";
+                if (reader.IsStartElement(key))
+                {
+                    result.Pos.X = reader.GetAttribute("value").TrySingle();
+                }
+                key = "PosY";
+                if (reader.IsStartElement(key))
+                {
+                    result.Pos.Y = reader.GetAttribute("value").TrySingle();
+                }
+                key = "PosZ";
+                if (reader.IsStartElement(key))
+                {
+                    result.Pos.Z = reader.GetAttribute("value").TrySingle();
+                }
+                key = "IsEnable";
+                if (reader.IsStartElement(key))
+                {
+                    result.IsEnable = reader.GetAttribute("value").TryBool();
+                }
             }
         }
+        return result;
     }
 }
