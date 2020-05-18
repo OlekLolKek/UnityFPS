@@ -9,6 +9,9 @@ public sealed class InputController : BaseController, IExecute
     private KeyCode _cancel = KeyCode.Escape;
     private KeyCode _reloadMag = KeyCode.R;
     private KeyCode _switchShootingMode = KeyCode.B;
+    private KeyCode _savePlayer = KeyCode.C;
+    private KeyCode _loadPlayer = KeyCode.V;
+    private KeyCode _screenshot = KeyCode.Q;
     private int _mouseButton = (int)MouseButton.LeftButton;
 
     #endregion
@@ -33,7 +36,21 @@ public sealed class InputController : BaseController, IExecute
         {
             ServiceLocator.Resolve<FlashlightController>().Switch(ServiceLocator.Resolve<Inventory>().Flashlight);
         }
-        //todo реализовать выбор оружия по колесу мыши
+
+        if (Input.GetKeyDown(_savePlayer))
+        {
+            ServiceLocator.Resolve<SaveDataRepository>().Save();
+        }
+
+        if (Input.GetKeyDown(_loadPlayer))
+        {
+            ServiceLocator.Resolve<SaveDataRepository>().Load();
+        }
+
+        if (Input.GetKeyDown(_screenshot))
+        {
+            ServiceLocator.Resolve<PhotoController>().SecondMethod();
+        }
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
