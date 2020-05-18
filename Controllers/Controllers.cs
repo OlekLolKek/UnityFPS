@@ -26,8 +26,9 @@ public sealed class Controllers : IInitialization
         ServiceLocator.SetService(new WeaponController());
         ServiceLocator.SetService(new InputController());
         ServiceLocator.SetService(new SelectionController());
+        ServiceLocator.SetService(new BotController());
 
-        _executeControllers = new IExecute[5];
+        _executeControllers = new IExecute[6];
 
         _executeControllers[0] = ServiceLocator.Resolve<TimeRemainingController>();
 
@@ -38,6 +39,8 @@ public sealed class Controllers : IInitialization
         _executeControllers[3] = ServiceLocator.Resolve<InputController>();
 
         _executeControllers[4] = ServiceLocator.Resolve<SelectionController>();
+
+        _executeControllers[5] = ServiceLocator.Resolve<BotController>();
     }
 
     #endregion
@@ -59,6 +62,7 @@ public sealed class Controllers : IInitialization
         ServiceLocator.Resolve<SelectionController>().On();
         ServiceLocator.Resolve<PlayerController>().On();
         ServiceLocator.Resolve<InputController>().On();
+        ServiceLocator.Resolve<BotController>().On();
     }
 
     #endregion

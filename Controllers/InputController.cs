@@ -109,7 +109,7 @@ public sealed class InputController : BaseController, IExecute
     private void SelectWeapon(int i)
     {
         ServiceLocator.Resolve<WeaponController>().Off();
-        var tempWeapon = ServiceLocator.Resolve<Inventory>().Weapons[i]; //todo инкапсулировать
+        var tempWeapon = ServiceLocator.Resolve<Inventory>().Weapons[i];
         if (tempWeapon != null)
         {
             ServiceLocator.Resolve<Inventory>().ActiveWeapon = i;
@@ -122,7 +122,7 @@ public sealed class InputController : BaseController, IExecute
         ServiceLocator.Resolve<WeaponController>().Off();
         ServiceLocator.Resolve<Inventory>().NextWeapon();
         var active = ServiceLocator.Resolve<Inventory>().ActiveWeapon;
-        var tempWeapon = ServiceLocator.Resolve<Inventory>().Weapons[active]; //todo инкапсулировать
+        var tempWeapon = ServiceLocator.Resolve<Inventory>().Weapons[active];
         if (tempWeapon != null)
         {
             ServiceLocator.Resolve<WeaponController>().On(tempWeapon);
@@ -134,7 +134,7 @@ public sealed class InputController : BaseController, IExecute
         ServiceLocator.Resolve<WeaponController>().Off();
         ServiceLocator.Resolve<Inventory>().PreviousWeapon();
         var active = ServiceLocator.Resolve<Inventory>().ActiveWeapon;
-        var tempWeapon = ServiceLocator.Resolve<Inventory>().Weapons[active]; //todo инкапсулировать
+        var tempWeapon = ServiceLocator.Resolve<Inventory>().Weapons[active];
         if (tempWeapon != null)
         {
             ServiceLocator.Resolve<WeaponController>().On(tempWeapon);
