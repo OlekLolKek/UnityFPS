@@ -43,7 +43,7 @@ public sealed class SaveDataRepository
         }
         var player = new SerializableGameObject
         {
-            Pos = Main.Instance.Player.position,
+            Pos = ServiceLocatorMonoBehaviour.GetService<CharacterController>().gameObject.transform.position,
             Name = "NEDNAR",
             IsEnable = true
         };
@@ -56,9 +56,9 @@ public sealed class SaveDataRepository
         var file = Path.Combine(_path, FILE_NAME);
         if (!File.Exists(file)) return;
         var newPlayer = _data.Load(file);
-        Main.Instance.Player.position = newPlayer.Pos;
-        Main.Instance.Player.name = newPlayer.Name;
-        Main.Instance.Player.gameObject.SetActive(newPlayer.IsEnable);
+        ServiceLocatorMonoBehaviour.GetService<CharacterController>().gameObject.transform.position = newPlayer.Pos;
+        ServiceLocatorMonoBehaviour.GetService<CharacterController>().gameObject.name = newPlayer.Name;
+        ServiceLocatorMonoBehaviour.GetService<CharacterController>().gameObject.SetActive(newPlayer.IsEnable);
 
         Debug.Log(newPlayer);
     }
