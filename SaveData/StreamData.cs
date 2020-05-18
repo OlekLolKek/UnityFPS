@@ -12,6 +12,9 @@ public sealed class StreamData : IData<SerializableGameObject>
         using (var sw = new StreamWriter(path))
         {
             sw.WriteLine(data.Name);
+            sw.WriteLine(data.Pos.X);
+            sw.WriteLine(data.Pos.Y);
+            sw.WriteLine(data.Pos.Z);
             sw.WriteLine(data.IsEnable);
         }
     }
