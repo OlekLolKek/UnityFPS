@@ -7,12 +7,16 @@ public sealed class Inventory : IInitialization
 
     private Weapon[] _weapons = new Weapon[5];
 
+    private int _activeWeapon;
+
     #endregion
 
 
     #region Properties
 
     public Weapon[] Weapons => _weapons;
+
+    public int ActiveWeapon { get => _activeWeapon; set => _activeWeapon = value; }
 
     public FlashlightModel Flashlight { get; private set; }
 
@@ -41,5 +45,16 @@ public sealed class Inventory : IInitialization
 
     }
 
+    public void NextWeapon()
+    {
+        if (ActiveWeapon == _weapons.Length - 1) ActiveWeapon = 0;
+        else ActiveWeapon++;
+    }
+
+    public void PreviousWeapon()
+    {
+        if (ActiveWeapon == 0) ActiveWeapon = _weapons.Length - 1;
+        else ActiveWeapon--;
+    }
     #endregion
 }

@@ -9,9 +9,11 @@ public class Target : MonoBehaviour, ICollision, ISelectObj
     public event Action OnPointChange = delegate { };
 
     public float HP = 100;
+
+    [SerializeField] private float _healthDivider = 1;
+    
     private bool _isDead;
     private float _timeToDestroy = 10.0f;
-    //todo дописать поглощение урона
 
     #endregion
 
@@ -23,7 +25,7 @@ public class Target : MonoBehaviour, ICollision, ISelectObj
         if (_isDead) return;
         if (HP > 0)
         {
-            HP -= info.Damage;
+            HP -= info.Damage / _healthDivider;
         }
 
         if (HP <= 0)

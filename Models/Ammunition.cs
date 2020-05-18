@@ -9,7 +9,7 @@ public abstract class Ammunition : BaseObjectScene
     public AmmunitionType Type = AmmunitionType.Bullet;
 
     [SerializeField] private float _timeToDestruct = 10.0f;
-    [SerializeField] private float _baseDamage = 10.0f;
+    [SerializeField] private float _baseDamage;
     protected float _currentDamage; //todo доделать свой урон
     private float _lossOfDamageAtTime = 0.2f;
     private ITimeRemaining _timeRemaining;

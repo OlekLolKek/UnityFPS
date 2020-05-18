@@ -8,6 +8,7 @@ public sealed class InputController : BaseController, IExecute
     private KeyCode _switchFlashlight = KeyCode.F;
     private KeyCode _cancel = KeyCode.Escape;
     private KeyCode _reloadMag = KeyCode.R;
+    private KeyCode _switchShootingMode = KeyCode.B;
     private int _mouseButton = (int)MouseButton.LeftButton;
 
     #endregion
@@ -39,11 +40,54 @@ public sealed class InputController : BaseController, IExecute
             SelectWeapon(0);
         }
 
-        if (Input.GetMouseButton(_mouseButton))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            SelectWeapon(1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            SelectWeapon(2);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            SelectWeapon(3);
+        }
+
+        if (Input.GetAxis("Mouse ScrollWheel") > 0)
+        {
+            NextWeapon();
+        }
+
+        if (Input.GetAxis("Mouse ScrollWheel") < 0)
+        {
+            PreviousWeapon();
+        }
+
+        if (Input.GetKeyDown(_switchShootingMode))
         {
             if (ServiceLocator.Resolve<WeaponController>().IsActive)
             {
-                ServiceLocator.Resolve<WeaponController>().Fire();
+                ServiceLocator.Resolve<WeaponController>().SwitchMode();
+            }
+        }
+
+        if (ServiceLocator.Resolve<WeaponController>().IsActive)
+        {
+            if (ServiceLocator.Resolve<WeaponController>().IsInAutomaticMode())
+            {
+                if (Input.GetMouseButton(_mouseButton))
+                {
+                    ServiceLocator.Resolve<WeaponController>().Fire();
+                }
+            }
+            else
+            {
+                if (Input.GetMouseButtonDown(_mouseButton))
+                {
+                    ServiceLocator.Resolve<WeaponController>().Fire();
+                }
             }
         }
 
@@ -62,11 +106,35 @@ public sealed class InputController : BaseController, IExecute
         }
     }
 
-
     private void SelectWeapon(int i)
     {
         ServiceLocator.Resolve<WeaponController>().Off();
         var tempWeapon = ServiceLocator.Resolve<Inventory>().Weapons[i]; //todo инкапсулировать
+        if (tempWeapon != null)
+        {
+            ServiceLocator.Resolve<Inventory>().ActiveWeapon = i;
+            ServiceLocator.Resolve<WeaponController>().On(tempWeapon);
+        }
+    }
+
+    private void NextWeapon()
+    {
+        ServiceLocator.Resolve<WeaponController>().Off();
+        ServiceLocator.Resolve<Inventory>().NextWeapon();
+        var active = ServiceLocator.Resolve<Inventory>().ActiveWeapon;
+        var tempWeapon = ServiceLocator.Resolve<Inventory>().Weapons[active]; //todo инкапсулировать
+        if (tempWeapon != null)
+        {
+            ServiceLocator.Resolve<WeaponController>().On(tempWeapon);
+        }
+    }
+
+    private void PreviousWeapon()
+    {
+        ServiceLocator.Resolve<WeaponController>().Off();
+        ServiceLocator.Resolve<Inventory>().PreviousWeapon();
+        var active = ServiceLocator.Resolve<Inventory>().ActiveWeapon;
+        var tempWeapon = ServiceLocator.Resolve<Inventory>().Weapons[active]; //todo инкапсулировать
         if (tempWeapon != null)
         {
             ServiceLocator.Resolve<WeaponController>().On(tempWeapon);

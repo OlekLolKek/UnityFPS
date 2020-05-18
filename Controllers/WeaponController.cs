@@ -44,5 +44,15 @@ public class WeaponController : BaseController
 
     }
 
+    public bool IsInAutomaticMode()
+    {
+        return _weapon.IsInAutomaticMode;
+    }
+
+    public void SwitchMode()
+    {
+        _weapon.SwitchMode();
+    }
+
     #endregion
 }
