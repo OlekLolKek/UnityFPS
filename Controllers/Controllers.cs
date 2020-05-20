@@ -27,6 +27,8 @@ public sealed class Controllers : IInitialization
         ServiceLocator.SetService(new InputController());
         ServiceLocator.SetService(new SelectionController());
         ServiceLocator.SetService(new BotController());
+        ServiceLocator.SetService(new SaveDataRepository());
+        ServiceLocator.SetService(new PhotoController());
 
         _executeControllers = new IExecute[6];
 
