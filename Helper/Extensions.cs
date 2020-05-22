@@ -24,6 +24,15 @@ public static partial class Extensions
         return Boolean.TryParse(self, out var res) && res;
     }
 
+    public static float TryFloat(this string self)
+    {
+        if (float.TryParse(self, out var res))
+        {
+            return res;
+        }
+        return float.MinValue;
+    }
+
     public static float TrySingle(this string self)
     {
         if (Single.TryParse(self, out var res))

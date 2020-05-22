@@ -25,7 +25,7 @@ public sealed class SaveDataRepository
         }
         else
         {
-            _data = new JsonData<SerializableGameObject>();
+            _data = new StreamData();//JsonData<SerializableGameObject>();
         }
         _path = Path.Combine(Application.dataPath, FOLDER_NAME);
     }

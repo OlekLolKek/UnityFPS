@@ -28,6 +28,9 @@ public sealed class StreamData : IData<SerializableGameObject>
             while (!sr.EndOfStream)
             {
                 result.Name = sr.ReadLine();
+                result.Pos.X = sr.ReadLine().TryFloat();
+                result.Pos.Y = sr.ReadLine().TryFloat();
+                result.Pos.Z = sr.ReadLine().TryFloat();
                 result.IsEnable = sr.ReadLine().TryBool();
             }
         }
