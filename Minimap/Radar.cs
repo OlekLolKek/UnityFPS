@@ -7,9 +7,10 @@ public class Radar : MonoBehaviour
 {
     #region Fields
 
+    public static List<RadarObject> RadObjects = new List<RadarObject>();
+
     private Transform _playerPos; //Позиция игрока
     private readonly float mapScale = 2;
-    public static List<RadarObject> RadObjects = new List<RadarObject>();
 
     #endregion
 
@@ -39,7 +40,7 @@ public class Radar : MonoBehaviour
         Image image = Instantiate(i);
         RadObjects.Add(new RadarObject { Owner = o, Icon = image });
     }
-    
+
     public static void RemoveRadarObject(GameObject o)
     {
         List<RadarObject> newList = new List<RadarObject>();
