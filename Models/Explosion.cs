@@ -49,11 +49,11 @@ public class Explosion : MonoBehaviour
 
     #region Methods
 
-    public void Explode(Collider[] hitColliders)
+    private void Explode(Collider[] hitColliders)
     {
-        foreach (Collider obj in hitColliders)
+        for (int i = 0; i < hitColliders.Length; i++)
         {
-            var tempRigidbody = obj?.GetComponent<Rigidbody>();
+            var tempRigidbody = hitColliders[i]?.GetComponent<Rigidbody>();
             if (!tempRigidbody) continue;
             tempRigidbody.useGravity = true;
             tempRigidbody.isKinematic = false;

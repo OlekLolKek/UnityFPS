@@ -19,9 +19,9 @@ public sealed class LaunchableGrenade : Ammunition
 
     public void Explode(Collider[] hitColliders, Collision collision)
     {
-        foreach (Collider obj in hitColliders)
+        for (int i = 0; i < hitColliders.Length; i++)
         {
-            var tempRigidbody = obj?.GetComponent<Rigidbody>();
+            var tempRigidbody = hitColliders[i]?.GetComponent<Rigidbody>();
             if (!tempRigidbody) continue;
             if (collision.gameObject.GetComponent<ICollision>() != null) collision.gameObject.GetComponent<ICollision>().OnCollision(new InfoCollision(_currentDamage, collision.contacts[0], collision.transform, Rigidbody.velocity));
             tempRigidbody.useGravity = true;
