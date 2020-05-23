@@ -25,10 +25,6 @@ public class Explosion : MonoBehaviour
         _light.GetComponent<Light>().color = Color.red;
         StartCoroutine(Light());
         _timeLight = 1;
-
-        var colliders = new Collider[100];
-        Physics.OverlapSphereNonAlloc(transform.position, Radius, colliders);
-        Explode(colliders);
     }
 
     //private void OnTriggerExit(Collider other)
@@ -53,11 +49,11 @@ public class Explosion : MonoBehaviour
 
     #region Methods
 
-    private void Explode(Collider[] hitColliders)
+    public void Explode(Collider[] hitColliders)
     {
         foreach (Collider obj in hitColliders)
         {
-            var tempRigidbody = obj.GetComponent<Rigidbody>();
+            var tempRigidbody = obj?.GetComponent<Rigidbody>();
             if (!tempRigidbody) continue;
             tempRigidbody.useGravity = true;
             tempRigidbody.isKinematic = false;
@@ -69,7 +65,6 @@ public class Explosion : MonoBehaviour
     {
         while (true)
         {
-            _light.SetActive(!_light.activeSelf);
             yield return new WaitForSeconds(_timeLight);
         }
     }
