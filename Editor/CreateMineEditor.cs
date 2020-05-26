@@ -30,7 +30,7 @@ public class CreateMineEditor : UnityEditor.Editor
 
             if (Physics.Raycast(ray, out var hit))
             {
-                _testTarget.InstantiateObj(new Vector3(hit.point.x, hit.point.y + 0.1f, hit.point.z));
+                _testTarget.InstantiateObj(new Vector3(hit.point.x, hit.point.y + 0.05f, hit.point.z));
                 SetObjectDirty(_testTarget.gameObject);
             }
         }

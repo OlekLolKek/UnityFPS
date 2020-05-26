@@ -33,6 +33,14 @@ public readonly struct InfoCollision
         _objCollision = objCollision;
     }
 
+    public InfoCollision(float damage, Transform objCollision, Vector3 dir = default)
+    {
+        _damage = damage;
+        _dir = dir;
+        _contact = new ContactPoint();
+        _objCollision = objCollision;
+    }
+
     #endregion
 
 }

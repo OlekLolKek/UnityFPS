@@ -23,7 +23,11 @@ public sealed class LaunchableGrenade : Ammunition
         {
             var tempRigidbody = hitColliders[i]?.GetComponent<Rigidbody>();
             if (!tempRigidbody) continue;
-            if (collision.gameObject.GetComponent<ICollision>() != null) collision.gameObject.GetComponent<ICollision>().OnCollision(new InfoCollision(_currentDamage, collision.contacts[0], collision.transform, Rigidbody.velocity));
+            if (collision.gameObject.GetComponent<ICollision>() != null)
+            {
+                Debug.Log("Есть ICollision");
+                collision.gameObject.GetComponent<ICollision>().OnCollision(new InfoCollision(_currentDamage, collision.contacts[0], collision.transform, Rigidbody.velocity));
+            }
             tempRigidbody.useGravity = true;
             tempRigidbody.isKinematic = false;
             tempRigidbody.AddExplosionForce(1500, transform.position, 5, 0.0f);
