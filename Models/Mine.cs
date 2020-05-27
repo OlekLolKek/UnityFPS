@@ -22,7 +22,7 @@ public class Mine : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Триггер");
-        if (other.gameObject.GetComponent<CharacterController>() || /*other.gameObject.CompareTag("Bot") ||*/ other.gameObject.CompareTag("Projectile"))
+        if (other.gameObject.GetComponent<IDamageble>() != null)
         {
             Debug.Log("Триггер с игроком/ботом");
             Explode(other);
@@ -73,13 +73,21 @@ public class Mine : MonoBehaviour
         {
             var tempRigidbody = colliders[i]?.GetComponent<Rigidbody>();
             if (!tempRigidbody) continue;
-            if (tempRigidbody.gameObject.GetComponent<ICollision>() != null)
+            Debug.Log("Есть RB");
+            var tempCollision = colliders[i]?.GetComponent<ICollision>();
+            if (tempCollision != null)
             {
                 Debug.Log("Есть ICollision");
                 if (!tempRigidbody.gameObject.GetComponent<Mine>())
                 {
                     Debug.Log("Это не мина");
-                    tempRigidbody.gameObject.GetComponent<ICollision>().OnCollision(new InfoCollision(_dmg, /*collider.transform.position,*/ collider.transform, gameObject.GetComponent<Rigidbody>().velocity));
+                    var tempDamage = tempRigidbody.gameObject.GetComponent<IDamageble>();
+                    tempRigidbody.gameObject.GetComponent<ICollision>().OnCollision(new InfoCollision(_dmg, /*collider.transform.position,*/ collider.transform, tempRigidbody.velocity));
+                    if (tempDamage != null)
+                    {
+                        Debug.Log("Есть Damageble");
+                        tempRigidbody.gameObject.GetComponent<IDamageble>().Damage(new InfoCollision(_dmg, /*collider.transform.position,*/ collider.transform, tempRigidbody.velocity));
+                    }
                 }
             }
             tempRigidbody.useGravity = true;

@@ -3,7 +3,7 @@ using System;
 using UnityEngine.AI;
 
 
-public sealed class Bot : BaseObjectScene, IExecute
+public sealed class Bot : BaseObjectScene, IExecute, IDamageble
 {
     #region Fields
 
@@ -72,19 +72,19 @@ public sealed class Bot : BaseObjectScene, IExecute
     private void OnEnable()
     {
         var bodyBot = GetComponentInChildren<BodyBot>();
-        if (bodyBot != null) bodyBot.OnApplyDamageChange += SetDamage;
+        if (bodyBot != null) bodyBot.OnApplyDamageChange += Damage;
 
         var headBot = GetComponentInChildren<HeadBot>();
-        if (headBot != null) headBot.OnApplyDamageChange += SetDamage;
+        if (headBot != null) headBot.OnApplyDamageChange += Damage;
     }
 
     private void OnDisable()
     {
         var bodyBot = GetComponentInChildren<BodyBot>();
-        if (bodyBot != null) bodyBot.OnApplyDamageChange -= SetDamage;
+        if (bodyBot != null) bodyBot.OnApplyDamageChange -= Damage;
 
         var headBot = GetComponentInChildren<HeadBot>();
-        if (headBot != null) headBot.OnApplyDamageChange -= SetDamage;
+        if (headBot != null) headBot.OnApplyDamageChange -= Damage;
     }
 
     #endregion
@@ -149,7 +149,7 @@ public sealed class Bot : BaseObjectScene, IExecute
         StateBot = StateBot.None;
     }
 
-    private void SetDamage(InfoCollision info)
+    public void Damage(InfoCollision info)
     {
         //todo реакция на попадание
 
