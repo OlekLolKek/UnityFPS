@@ -1,5 +1,5 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 
 public class PlayerModel : BaseObjectScene, IDamageble
@@ -9,6 +9,9 @@ public class PlayerModel : BaseObjectScene, IDamageble
     [SerializeField] private float _HP;
     [SerializeField] private float _maxHP;
     [SerializeField] private float _healthDivider;
+    [SerializeField] private Image _hpBar;
+    [SerializeField] private Text _hpText;
+    [SerializeField] private Transform _player;
     private Vector3 _startPosition;
 
     #endregion
@@ -19,7 +22,8 @@ public class PlayerModel : BaseObjectScene, IDamageble
     protected override void Awake()
     {
         base.Awake();
-        _startPosition = transform.position;
+        _hpText.text = $"{_HP}";
+        _startPosition = new Vector3(0, 1, -7);
     }
 
     #endregion
@@ -32,6 +36,8 @@ public class PlayerModel : BaseObjectScene, IDamageble
         if (_HP > 0)
         {
             _HP -= info.Damage / _healthDivider;
+            _hpBar.fillAmount = _HP / 100;
+            _hpText.text = _HP.ToString();
 
             if (_HP <= 0)
             {
@@ -44,8 +50,11 @@ public class PlayerModel : BaseObjectScene, IDamageble
 
     private void Revive()
     {
-        transform.position = _startPosition;
+        _player.position = _startPosition;
         _HP = _maxHP;
+        _hpBar.fillAmount = _HP / 100;
+        _hpText.text = _HP.ToString();
+        Debug.Log("Возрождение");
     }
 
     //public bool EditHP()
