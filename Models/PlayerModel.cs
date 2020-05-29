@@ -33,8 +33,6 @@ public class PlayerModel : BaseObjectScene, IDamageble
         {
             _HP -= info.Damage / _healthDivider;
 
-            UIInterface
-
             if (_HP <= 0)
             {
                 Revive();
