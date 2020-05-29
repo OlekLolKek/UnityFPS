@@ -12,6 +12,7 @@ public sealed class Bullet : Ammunition
 
         if (setDamage != null)
         {
+            Debug.Log(collision.gameObject.name);
             setDamage.OnCollision(new InfoCollision(_currentDamage, collision.contacts[0], collision.transform, Rigidbody.velocity));
         }
 

@@ -3,7 +3,7 @@ using System;
 using UnityEngine.AI;
 
 
-public sealed class Bot : BaseObjectScene, IExecute, IDamageble
+public sealed class Bot : BaseObjectScene, IExecute
 {
     #region Fields
 
@@ -162,6 +162,7 @@ public sealed class Bot : BaseObjectScene, IExecute, IDamageble
         {
             StateBot = StateBot.Dead;
             Agent.enabled = false;
+            //Destroy(GetComponent<Renderer>());
             foreach (var child in GetComponentsInChildren<Transform>())
             {
                 child.parent = null;
@@ -171,9 +172,10 @@ public sealed class Bot : BaseObjectScene, IExecute, IDamageble
                 {
                     tempRbChild = child.gameObject.AddComponent<Rigidbody>();
                 }
-                //tempRbChild.AddForce(info.Dir * Random.Range(10, 300));
+                tempRbChild.isKinematic = false;
+                tempRbChild.AddForce(info.Dir * UnityEngine.Random.Range(10, 30));
 
-                Destroy(child.gameObject, 10);
+                Destroy(child.gameObject, 7);
             }
 
             OnDieChange?.Invoke(this);

@@ -6,8 +6,10 @@ public class Mine : MonoBehaviour
     #region Fields
 
     [SerializeField] private AudioClip _clip;
+    [SerializeField] private float _radius = 5;
+    [SerializeField] private float _force = 1500;
 
-    private int _dmg = 999;
+    private int _dmg = 50;
 
     #endregion
 
@@ -22,77 +24,48 @@ public class Mine : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Триггер");
-        if (other.gameObject.GetComponent<IDamageble>() != null)
+        if (other.gameObject.GetComponent<IDamageble>() != null || other.gameObject.GetComponent<ICollision>() != null)
         {
             Debug.Log("Триггер с игроком/ботом");
             Explode(other);
         }
     }
 
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    Debug.Log("Коллизия");
-    //    if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Bot") || collision.gameObject.CompareTag("Projectile"))
-    //    {
-    //        Debug.Log("Коллизия с игроком/ботом");
-    //        Explode(collision);
-    //    }
-    //}
-
     #endregion
 
 
     #region Methods
 
-    //public void Explode(Collision collision)
-    //{
-    //    var colliders = new Collider[100];
-    //    Physics.OverlapSphereNonAlloc(transform.position, 1500, colliders);
-    //    for (int i = 0; i < colliders.Length; i++)
-    //    {
-    //        var tempRigidbody = colliders[i]?.GetComponent<Rigidbody>();
-    //        if (!tempRigidbody) continue;
-    //        if (colliders[i].gameObject.GetComponent<ICollision>() != null)
-    //        {
-    //            Debug.Log("Есть ICollision");
-    //            collision.gameObject.GetComponent<ICollision>().OnCollision(new InfoCollision(_dmg, collision.contacts[0], collision.transform, gameObject.GetComponent<Rigidbody>().velocity));
-    //        }
-    //        tempRigidbody.useGravity = true;
-    //        tempRigidbody.isKinematic = false;
-    //        tempRigidbody.AddExplosionForce(1500, transform.position, 5, 0.0f);
-    //    }
-    //    AudioSource.PlayClipAtPoint(_clip, transform.position);
-    //    Destroy(gameObject);
-    //}
-
     public void Explode(Collider collider)
     {
         var colliders = new Collider[100];
-        Physics.OverlapSphereNonAlloc(transform.position, 1500, colliders);
+        Physics.OverlapSphereNonAlloc(transform.position, 5, colliders);
         for (int i = 0; i < colliders.Length; i++)
         {
             var tempRigidbody = colliders[i]?.GetComponent<Rigidbody>();
-            if (!tempRigidbody) continue;
-            Debug.Log("Есть RB");
-            var tempCollision = colliders[i]?.GetComponent<ICollision>();
-            if (tempCollision != null)
+
+            if (tempRigidbody)
             {
-                Debug.Log("Есть ICollision");
-                if (!tempRigidbody.gameObject.GetComponent<Mine>())
+                Debug.Log("Есть RB");
+                Debug.Log(tempRigidbody.gameObject.name);
+
+                var tempCollision = tempRigidbody.gameObject.GetComponent<ICollision>();
+
+                if (tempCollision != null)
                 {
-                    Debug.Log("Это не мина");
-                    var tempDamage = tempRigidbody.gameObject.GetComponent<IDamageble>();
+                    Debug.Log("Есть ICollision");
+                    Debug.Log(tempRigidbody.gameObject.name);
                     tempRigidbody.gameObject.GetComponent<ICollision>().OnCollision(new InfoCollision(_dmg, /*collider.transform.position,*/ collider.transform, tempRigidbody.velocity));
-                    if (tempDamage != null)
-                    {
-                        Debug.Log("Есть Damageble");
-                        tempRigidbody.gameObject.GetComponent<IDamageble>().Damage(new InfoCollision(_dmg, /*collider.transform.position,*/ collider.transform, tempRigidbody.velocity));
-                    }
                 }
+                var tempDamage = tempRigidbody.gameObject.GetComponent<IDamageble>();
+                if (tempDamage != null)
+                {
+                    Debug.Log("Есть Damageble");
+                    tempRigidbody.gameObject.GetComponent<IDamageble>().Damage(new InfoCollision(_dmg, /*collider.transform.position,*/ collider.transform, tempRigidbody.velocity));
+                    Debug.Log(tempRigidbody.gameObject.name);
+                }
+                tempRigidbody.AddExplosionForce(_force, transform.position, _radius, 0.0f);
             }
-            tempRigidbody.useGravity = true;
-            tempRigidbody.isKinematic = false;
-            tempRigidbody.AddExplosionForce(1500, transform.position, 5, 0.0f);
         }
         AudioSource.PlayClipAtPoint(_clip, transform.position);
         Destroy(gameObject);
