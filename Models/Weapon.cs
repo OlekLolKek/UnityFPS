@@ -20,6 +20,7 @@ public abstract class Weapon : BaseObjectScene
     [SerializeField] protected AudioSource _audioSource;
     [SerializeField] protected float _force = 999.0f;
     [SerializeField] protected float _rechargeTime = 0.2f;
+    [SerializeField] protected float _reloadTime = 1.0f;
     [SerializeField] protected int _magSize = 30;
     [SerializeField] protected int _countMag = 5;
     [SerializeField] protected bool _isSwitchable = true;
@@ -30,6 +31,7 @@ public abstract class Weapon : BaseObjectScene
 
     protected bool _isReady = true;
     protected ITimeRemaining _timeRemaining;
+    protected ITimeRemaining _reloadTimeRemaining;
 
     #endregion
 
@@ -49,12 +51,14 @@ public abstract class Weapon : BaseObjectScene
     private void Start()
     {
         _timeRemaining = new TimeRemaining(ReadyShoot, _rechargeTime);
+        _reloadTimeRemaining = new TimeRemaining(ReadyShoot, _reloadTime);
         for (var i = 0; i < _countMag; i++)
         {
             AddMag(new Magazine { CountAmmunition = _magSize });
         }
 
         ReloadMag();
+        _isReady = true;
     }
 
     public abstract void Fire();
@@ -81,6 +85,8 @@ public abstract class Weapon : BaseObjectScene
     public void ReloadMag()
     {
         if (CountMag <= 0) return;
+        _isReady = false;
+        _reloadTimeRemaining.AddTimeRemaining();
         Magazine = _mags.Dequeue();
     }
 

@@ -10,13 +10,20 @@ public sealed class Bot : BaseObjectScene, IExecute
     public float HP = 100;
     public Vision Vision;
     public Weapon Weapon;
+    public event Action<Bot> OnDieChange;
+
+    //[SerializeField] Vector3 _movingVelocity = new Vector3 (0, 0, 0);
 
     private float _waitTime = 3;
+    private float _stoppingDistance = 2.0f;
     private StateBot _stateBot;
     private Vector3 _point;
-    private float _stoppingDistance = 2.0f;
+    private Animator _animator;
 
-    public event Action<Bot> OnDieChange;
+    private static readonly int _isMoving = Animator.StringToHash("isMoving");
+    private static readonly int _fireDisable = Animator.StringToHash("FireDisable");
+    private static readonly int _fireEnable = Animator.StringToHash("FireEnable");
+
     private ITimeRemaining _timeRemaining;
 
     #endregion
@@ -36,22 +43,28 @@ public sealed class Bot : BaseObjectScene, IExecute
             switch (value)
             {
                 case StateBot.None:
-                    Color = Color.white;
+                    //Color = Color.white;
+                    //_animator.SetBool(_isMoving, false);
                     break;
                 case StateBot.Patrol:
-                    Color = Color.green;
+                    //_animator.SetBool(_isMoving, true);
+                    //Color = Color.green;
                     break;
                 case StateBot.Inspection:
-                    Color = Color.yellow;
+                    //_animator.SetBool(_isMoving, false);
+                    //Color = Color.yellow;
                     break;
                 case StateBot.Detected:
-                    Color = Color.red;
+                    //_animator.SetBool(_isMoving, true);
+                    //Color = Color.red;
                     break;
                 case StateBot.Dead:
-                    Color = Color.gray;
+                    //_animator.SetBool(_isMoving, false);
+                    //Color = Color.gray;
                     break;
                 default:
-                    Color = Color.white;
+                    //_animator.SetBool(_isMoving, false);
+                    //Color = Color.white;
                     break; 
             }
         }
@@ -65,8 +78,15 @@ public sealed class Bot : BaseObjectScene, IExecute
     protected override void Awake()
     {
         base.Awake();
+        _animator = GetComponent<Animator>();
+        _animator.SetBool(_isMoving, true);
         Agent = GetComponent<NavMeshAgent>();
         _timeRemaining = new TimeRemaining(ResetStateBot, _waitTime);
+    }
+
+    private void Update()
+    {
+
     }
 
     private void OnEnable()
@@ -95,6 +115,8 @@ public sealed class Bot : BaseObjectScene, IExecute
     public void Execute()
     {
         if (StateBot == StateBot.Dead) return;
+
+        _animator.SetBool(_isMoving, Agent.hasPath);
 
         if (StateBot != StateBot.Detected)
         {
@@ -133,7 +155,14 @@ public sealed class Bot : BaseObjectScene, IExecute
             }
             if (Vision.VisionM(transform, Target))
             {
-                Weapon.Fire();
+                if (Weapon.Magazine.CountAmmunition != 0)
+                {
+                    Weapon.Fire();
+                }
+                else
+                {
+                    Weapon.ReloadMag(); 
+                }
             }
             else
             {
