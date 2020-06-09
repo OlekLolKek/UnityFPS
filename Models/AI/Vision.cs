@@ -7,7 +7,7 @@ public sealed class Vision
     #region Fields
 
     public float ActiveDis = 10;
-    public float ActiveAng = 45;
+    public float ActiveAng = 60;
 
     #endregion
 

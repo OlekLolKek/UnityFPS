@@ -2,6 +2,7 @@
 using System;
 using UnityEngine.AI;
 using System.Threading;
+using UnityEngine.Assertions.Must;
 
 public sealed class Bot : BaseObjectScene, IExecute
 {
@@ -13,6 +14,8 @@ public sealed class Bot : BaseObjectScene, IExecute
     public event Action<Bot> OnDieChange;
 
     [SerializeField] private LayerMask _rayLayer;
+    [SerializeField] private Vector3 _leftFootOffset;
+    [SerializeField] private Vector3 _rightFootOffset;
     [SerializeField] private Transform _lookObj;
     [SerializeField] private Transform _leftHandObj;
     [SerializeField] private Transform _rightHandObj;
@@ -128,6 +131,11 @@ public sealed class Bot : BaseObjectScene, IExecute
             }
         }
 
+        _weightFootR = _animator.GetFloat("Right_Leg");
+        _weightFootL = _animator.GetFloat("Left_Leg");
+
+        LegsIK();
+
         //_weightFootR = _animator.GetFloat("Right_Leg");
         //_weightFootL = _animator.GetFloat("Left_Leg");
 
@@ -221,6 +229,35 @@ public sealed class Bot : BaseObjectScene, IExecute
         //    _lFpos = Vector3.Lerp(_footL.position, leftHit.point, _smoothness);
         //    _lFrot = Quaternion.FromToRotation(transform.up, leftHit.normal) * transform.rotation;
         //}
+    }
+
+    private void LegsIK()
+    {
+        _animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, _weightFootL);
+        _animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, _weightFootL);
+        _animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, _weightFootR);
+        _animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, _weightFootR);
+
+        RaycastHit hit;
+        _lFpos = _animator.GetIKPosition(AvatarIKGoal.LeftFoot);
+        if (Physics.Raycast(_lFpos + Vector3.up, Vector3.down, out hit, 2.0f, _rayLayer))
+        {
+            Debug.DrawLine(hit.point, hit.point + hit.normal, Color.red);
+            _animator.SetIKPosition(AvatarIKGoal.LeftFoot, hit.point + _leftFootOffset);
+            _animator.SetIKRotation(AvatarIKGoal.LeftFoot, Quaternion.LookRotation(Vector3.ProjectOnPlane(_footL.forward, hit.normal)));
+            _lFpos = Vector3.Lerp(_footL.position, hit.point, _smoothness);
+            //_lFpos = hit.point;
+        }
+
+        _rFpos = _animator.GetIKPosition(AvatarIKGoal.RightFoot);
+        if (Physics.Raycast(_rFpos + Vector3.up, Vector3.down, out hit, 2.0f, _rayLayer))
+        {
+            Debug.DrawLine(hit.point, hit.point + hit.normal, Color.red);
+            _animator.SetIKPosition(AvatarIKGoal.RightFoot, hit.point + _rightFootOffset);
+            _animator.SetIKRotation(AvatarIKGoal.RightFoot, Quaternion.LookRotation(Vector3.ProjectOnPlane(_footR.forward, hit.normal)));
+            _rFpos = Vector3.Lerp(_footL.position, hit.point, _smoothness);
+            //_rFpos = hit.point;
+        }
     }
 
     private void ResetStateBot()
