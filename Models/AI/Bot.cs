@@ -88,8 +88,15 @@ public sealed class Bot : BaseObjectScene, IExecute
 
     private void OnEnable()
     {
-        var bodyBot = GetComponentInChildren<BodyBot>();
-        if (bodyBot != null) bodyBot.OnApplyDamageChange += Damage;
+        var bodyBot = GetComponentsInChildren<BodyBot>();
+        for (int i = 0; i < bodyBot.Length; i++)
+        {
+            if (bodyBot[i] != null)
+            {
+                bodyBot[i].OnApplyDamageChange += Damage;
+            }
+        }
+
 
         var headBot = GetComponentInChildren<HeadBot>();
         if (headBot != null) headBot.OnApplyDamageChange += Damage;
@@ -97,8 +104,14 @@ public sealed class Bot : BaseObjectScene, IExecute
 
     private void OnDisable()
     {
-        var bodyBot = GetComponentInChildren<BodyBot>();
-        if (bodyBot != null) bodyBot.OnApplyDamageChange -= Damage;
+        var bodyBot = GetComponentsInChildren<BodyBot>();
+        for (int i = 0; i < bodyBot.Length; i++)
+        {
+            if (bodyBot[i] != null)
+            {
+                bodyBot[i].OnApplyDamageChange -= Damage;
+            }
+        }
 
         var headBot = GetComponentInChildren<HeadBot>();
         if (headBot != null) headBot.OnApplyDamageChange -= Damage;
@@ -246,7 +259,6 @@ public sealed class Bot : BaseObjectScene, IExecute
             _animator.SetIKPosition(AvatarIKGoal.LeftFoot, hit.point + _leftFootOffset);
             _animator.SetIKRotation(AvatarIKGoal.LeftFoot, Quaternion.LookRotation(Vector3.ProjectOnPlane(_footL.forward, hit.normal)));
             _lFpos = Vector3.Lerp(_footL.position, hit.point, _smoothness);
-            //_lFpos = hit.point;
         }
 
         _rFpos = _animator.GetIKPosition(AvatarIKGoal.RightFoot);
@@ -256,7 +268,6 @@ public sealed class Bot : BaseObjectScene, IExecute
             _animator.SetIKPosition(AvatarIKGoal.RightFoot, hit.point + _rightFootOffset);
             _animator.SetIKRotation(AvatarIKGoal.RightFoot, Quaternion.LookRotation(Vector3.ProjectOnPlane(_footR.forward, hit.normal)));
             _rFpos = Vector3.Lerp(_footL.position, hit.point, _smoothness);
-            //_rFpos = hit.point;
         }
     }
 
@@ -270,26 +281,37 @@ public sealed class Bot : BaseObjectScene, IExecute
         if (HP > 0)
         {
             HP -= info.Damage;
+            Debug.Log(HP);
         }
 
         if (HP <= 0)
         {
             StateBot = StateBot.Dead;
             Agent.enabled = false;
-            foreach (var child in GetComponentsInChildren<Transform>())
+
+            var bodies = GetComponentsInChildren<Rigidbody>();
+            foreach (var body in bodies)
             {
-                child.parent = null;
-
-                var tempRbChild = child.GetComponent<Rigidbody>();
-                if (!tempRbChild)
-                {
-                    tempRbChild = child.gameObject.AddComponent<Rigidbody>();
-                }
-                tempRbChild.isKinematic = false;
-                tempRbChild.AddForce(info.Dir * UnityEngine.Random.Range(10, 30));
-
-                Destroy(child.gameObject, 7);
+                body.isKinematic = false;
             }
+            _animator.enabled = false;
+
+            Destroy(gameObject, 7);
+
+            //foreach (var child in GetComponentsInChildren<Transform>())
+            //{
+            //    child.parent = null;
+
+            //    var tempRbChild = child.GetComponent<Rigidbody>();
+            //    if (!tempRbChild)
+            //    {
+            //        tempRbChild = child.gameObject.AddComponent<Rigidbody>();
+            //    }
+            //    tempRbChild.isKinematic = false;
+            //    tempRbChild.AddForce(info.Dir * UnityEngine.Random.Range(10, 30));
+
+            //    
+            //}
 
             OnDieChange?.Invoke(this);
         }

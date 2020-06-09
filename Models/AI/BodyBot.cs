@@ -16,6 +16,7 @@ public class BodyBot : MonoBehaviour, ICollision
     public void OnCollision(InfoCollision info)
     {
         OnApplyDamageChange?.Invoke(info);
+        Debug.Log("В тело");
     }
 
     #endregion
