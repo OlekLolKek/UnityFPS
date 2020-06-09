@@ -12,13 +12,14 @@ public sealed class Bot : BaseObjectScene, IExecute
     public Weapon Weapon;
     public event Action<Bot> OnDieChange;
 
-    //[SerializeField] Vector3 _movingVelocity = new Vector3 (0, 0, 0);
+    [SerializeField] private Transform _lookObj;
 
-    private float _waitTime = 3;
-    private float _stoppingDistance = 2.0f;
     private StateBot _stateBot;
     private Vector3 _point;
     private Animator _animator;
+    private float _waitTime = 3;
+    private float _stoppingDistance = 2.0f;
+    private bool _isPlayerVisible = false;
 
     private static readonly int _isMoving = Animator.StringToHash("isMoving");
     private static readonly int _fireDisable = Animator.StringToHash("FireDisable");
@@ -42,30 +43,12 @@ public sealed class Bot : BaseObjectScene, IExecute
             _stateBot = value;
             switch (value)
             {
-                case StateBot.None:
-                    //Color = Color.white;
-                    //_animator.SetBool(_isMoving, false);
-                    break;
-                case StateBot.Patrol:
-                    //_animator.SetBool(_isMoving, true);
-                    //Color = Color.green;
-                    break;
-                case StateBot.Inspection:
-                    //_animator.SetBool(_isMoving, false);
-                    //Color = Color.yellow;
-                    break;
+
                 case StateBot.Detected:
-                    //_animator.SetBool(_isMoving, true);
-                    //Color = Color.red;
-                    break;
-                case StateBot.Dead:
-                    //_animator.SetBool(_isMoving, false);
-                    //Color = Color.gray;
+                    _isPlayerVisible = true;
                     break;
                 default:
-                    //_animator.SetBool(_isMoving, false);
-                    //Color = Color.white;
-                    break; 
+                    break;
             }
         }
     }
@@ -84,11 +67,6 @@ public sealed class Bot : BaseObjectScene, IExecute
         _timeRemaining = new TimeRemaining(ResetStateBot, _waitTime);
     }
 
-    private void Update()
-    {
-
-    }
-
     private void OnEnable()
     {
         var bodyBot = GetComponentInChildren<BodyBot>();
@@ -105,6 +83,25 @@ public sealed class Bot : BaseObjectScene, IExecute
 
         var headBot = GetComponentInChildren<HeadBot>();
         if (headBot != null) headBot.OnApplyDamageChange -= Damage;
+    }
+
+    private void OnAnimatorIK()
+    {
+        //if (_isActive)
+        //{
+        //    if (Target != null)
+        //    {
+        if (_isPlayerVisible)
+        {
+            _animator.SetLookAtWeight(0.4f);
+            _animator.SetLookAtPosition(Target.position);
+        }
+        //}
+        //}
+        //else
+        //{
+        //    _animator.SetLookAtWeight(0);
+        //}
     }
 
     #endregion
@@ -155,13 +152,14 @@ public sealed class Bot : BaseObjectScene, IExecute
             }
             if (Vision.VisionM(transform, Target))
             {
+                _isPlayerVisible = true;
                 if (Weapon.Magazine.CountAmmunition != 0)
                 {
                     Weapon.Fire();
                 }
                 else
                 {
-                    Weapon.ReloadMag(); 
+                    Weapon.ReloadMag();
                 }
             }
             else
@@ -182,12 +180,12 @@ public sealed class Bot : BaseObjectScene, IExecute
     {
         //todo реакция на попадание
 
-       if (HP > 0)
+        if (HP > 0)
         {
             HP -= info.Damage;
         }
 
-       if (HP <= 0)
+        if (HP <= 0)
         {
             StateBot = StateBot.Dead;
             Agent.enabled = false;
