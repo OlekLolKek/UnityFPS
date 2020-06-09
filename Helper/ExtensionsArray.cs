@@ -1,6 +1,7 @@
 ﻿using System;
 
-public static class Extention
+
+public static class ExtensionsArray
 {
     #region Methods
 

@@ -2,16 +2,6 @@
 
 public class UnitMotor : IMotor
 {
-    #region PrivateData
-
-    private Vector2 _inputVector2;
-    private Vector3 _moveVector;
-    private Quaternion _characterTargetRot;
-    private Quaternion _cameraTargetRot;
-
-    #endregion
-
-
     #region Fields
 
     public float XSensitivity = 2f;
@@ -22,10 +12,15 @@ public class UnitMotor : IMotor
     public bool Smooth;
     public float SmoothTime = 5f;
 
+    private Vector2 _inputVector2;
+    private Vector3 _moveVector;
+    private Quaternion _characterTargetRot;
+    private Quaternion _cameraTargetRot;
+
     private CharacterController _characterController;
     private Transform _head;
     private Transform _instance;
-    private float _MS = 10;  //MS = MoveSpeed is a customary abbreviation meaning player's move speed.
+    private float _MS = 10;
     private float _jumpPower = 10;
     private float _gravityForce;
 
