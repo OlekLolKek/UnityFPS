@@ -13,6 +13,8 @@ public sealed class Bot : BaseObjectScene, IExecute
     public event Action<Bot> OnDieChange;
 
     [SerializeField] private Transform _lookObj;
+    [SerializeField] private Transform _leftHandObj;
+    [SerializeField] private Transform _rightHandObj;
 
     private StateBot _stateBot;
     private Vector3 _point;
@@ -63,6 +65,7 @@ public sealed class Bot : BaseObjectScene, IExecute
         base.Awake();
         _animator = GetComponent<Animator>();
         _animator.SetBool(_isMoving, true);
+        _rightHandObj = FindObjectOfType<CharacterController>().transform;
         Agent = GetComponent<NavMeshAgent>();
         _timeRemaining = new TimeRemaining(ResetStateBot, _waitTime);
     }
@@ -87,21 +90,30 @@ public sealed class Bot : BaseObjectScene, IExecute
 
     private void OnAnimatorIK()
     {
-        //if (_isActive)
-        //{
-        //    if (Target != null)
-        //    {
         if (_isPlayerVisible)
         {
-            _animator.SetLookAtWeight(0.4f);
-            _animator.SetLookAtPosition(Target.position);
+            if (Target != null)
+            {
+                _animator.SetLookAtWeight(0.4f);
+                _animator.SetLookAtPosition(Target.position);
+            }
+
+            if (_rightHandObj != null)
+            {
+                _animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0.4f);
+                _animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0.1f);
+                _animator.SetIKPosition(AvatarIKGoal.RightHand, _rightHandObj.position);
+                _animator.SetIKRotation(AvatarIKGoal.RightHand, _rightHandObj.rotation);
+            }
+
+            if (_leftHandObj != null)
+            {
+                _animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
+                _animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 0.1f);
+                _animator.SetIKPosition(AvatarIKGoal.LeftHand, _leftHandObj.position);
+                _animator.SetIKRotation(AvatarIKGoal.LeftHand, _leftHandObj.rotation);
+            }
         }
-        //}
-        //}
-        //else
-        //{
-        //    _animator.SetLookAtWeight(0);
-        //}
     }
 
     #endregion
@@ -164,6 +176,7 @@ public sealed class Bot : BaseObjectScene, IExecute
             }
             else
             {
+                _isPlayerVisible = false;
                 MovePoint(Target.position);
             }
 
@@ -189,7 +202,6 @@ public sealed class Bot : BaseObjectScene, IExecute
         {
             StateBot = StateBot.Dead;
             Agent.enabled = false;
-            //Destroy(GetComponent<Renderer>());
             foreach (var child in GetComponentsInChildren<Transform>())
             {
                 child.parent = null;
