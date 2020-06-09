@@ -1,4 +1,4 @@
-﻿public class PlayerController : BaseController, IExecute
+﻿public class PlayerController : BaseController, IExecute, IInitialization
 {
     #region Fields
 
@@ -18,6 +18,12 @@
 
 
     #region Methods
+
+    public void Initialization()
+    {
+        UIInterface.HealthBarUI.SetActive(true);
+        UIInterface.HealthTextUi.SetActive(true);
+    }
 
     public void Execute()
     {

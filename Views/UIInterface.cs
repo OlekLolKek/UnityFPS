@@ -7,6 +7,8 @@ public sealed class UIInterface
 
     private FlashlightUIText _flashlightUIText;
     private FlashlightUIBar _flashlightUIBar;
+    private HealthBarUI _healthBarUI;
+    private HealthTextUI _healthTextUI;
     private WeaponUIText _weaponUIText;
     private SelectionObjMessageUI _selectionObjMessageUI;
 
@@ -36,6 +38,31 @@ public sealed class UIInterface
                 _flashlightUIBar = Object.FindObjectOfType<FlashlightUIBar>();
             }
             return _flashlightUIBar;
+        }
+    }
+
+
+    public HealthBarUI HealthBarUI
+    {
+        get
+        {
+            if (!_healthBarUI)
+            {
+                _healthBarUI = Object.FindObjectOfType<HealthBarUI>();
+            }
+            return _healthBarUI;
+        }
+    }
+
+    public HealthTextUI HealthTextUi
+    {
+        get
+        {
+            if (!_healthTextUI)
+            {
+                _healthTextUI = Object.FindObjectOfType<HealthTextUI>();
+            }
+            return _healthTextUI;
         }
     }
 

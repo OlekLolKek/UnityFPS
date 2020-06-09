@@ -25,6 +25,10 @@ public class Explosion : MonoBehaviour
         _light.GetComponent<Light>().color = Color.red;
         StartCoroutine(Light());
         _timeLight = 1;
+
+        var colliders = new Collider[100];
+        Physics.OverlapSphereNonAlloc(transform.position, Radius, colliders);
+        Explode(colliders);
     }
 
     //private void OnTriggerExit(Collider other)

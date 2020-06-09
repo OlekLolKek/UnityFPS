@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 
-public sealed class LaunchableGrenade : Ammunition
+public class Mine : MonoBehaviour
 {
     #region Fields
 
@@ -9,18 +9,26 @@ public sealed class LaunchableGrenade : Ammunition
     [SerializeField] private float _radius = 5;
     [SerializeField] private float _force = 1500;
 
+    private int _dmg = 50;
+
     #endregion
 
 
     #region UnityMethods
 
-    private void OnCollisionEnter(Collision collision)
+    private void Start()
     {
-        var setDamage = collision.gameObject.GetComponent<ICollision>();
+        Debug.Log("Старт");
+    }
 
-        Explode(collision);
-
-        DestroyAmmunition();
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Триггер");
+        if (other.gameObject.GetComponent<IDamageble>() != null || other.gameObject.GetComponent<ICollision>() != null)
+        {
+            Debug.Log("Триггер с игроком/ботом");
+            Explode(other);
+        }
     }
 
     #endregion
@@ -28,7 +36,7 @@ public sealed class LaunchableGrenade : Ammunition
 
     #region Methods
 
-    public void Explode(Collision collision)
+    public void Explode(Collider collider)
     {
         var colliders = new Collider[100];
         Physics.OverlapSphereNonAlloc(transform.position, 5, colliders);
@@ -47,13 +55,13 @@ public sealed class LaunchableGrenade : Ammunition
                 {
                     Debug.Log("Есть ICollision");
                     Debug.Log(tempRigidbody.gameObject.name);
-                    tempRigidbody.gameObject.GetComponent<ICollision>().OnCollision(new InfoCollision(_currentDamage, collision.contacts[0], collision.transform, tempRigidbody.velocity));
+                    tempRigidbody.gameObject.GetComponent<ICollision>().OnCollision(new InfoCollision(_dmg, /*collider.transform.position,*/ collider.transform, tempRigidbody.velocity));
                 }
                 var tempDamage = tempRigidbody.gameObject.GetComponent<IDamageble>();
                 if (tempDamage != null)
                 {
                     Debug.Log("Есть Damageble");
-                    tempRigidbody.gameObject.GetComponent<IDamageble>().Damage(new InfoCollision(_currentDamage, collision.contacts[0], collision.transform, tempRigidbody.velocity));
+                    tempRigidbody.gameObject.GetComponent<IDamageble>().Damage(new InfoCollision(_dmg, /*collider.transform.position,*/ collider.transform, tempRigidbody.velocity));
                     Debug.Log(tempRigidbody.gameObject.name);
                 }
                 tempRigidbody.AddExplosionForce(_force, transform.position, _radius, 0.0f);
@@ -64,5 +72,4 @@ public sealed class LaunchableGrenade : Ammunition
     }
 
     #endregion
-
 }

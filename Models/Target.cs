@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System;
-
+using TMPro;
 
 public class Target : MonoBehaviour, ICollision, ISelectObj
 {
@@ -34,6 +34,9 @@ public class Target : MonoBehaviour, ICollision, ISelectObj
             {
                 gameObject.AddComponent<Rigidbody>();
             }
+            var rb = gameObject.GetComponent<Rigidbody>();
+            rb.isKinematic = false;
+            rb.useGravity = true;
             Destroy(gameObject, _timeToDestroy);
 
             OnPointChange.Invoke();
