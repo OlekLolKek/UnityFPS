@@ -1,25 +1,37 @@
 ﻿using UnityEngine;
 using System;
 using UnityEngine.AI;
-
+using System.Threading;
 
 public sealed class Bot : BaseObjectScene, IExecute
 {
     #region Fields
 
-    public float HP = 100;
+    public float HP = 100.0f;
     public Vision Vision;
     public Weapon Weapon;
     public event Action<Bot> OnDieChange;
 
+    [SerializeField] private LayerMask _rayLayer;
     [SerializeField] private Transform _lookObj;
     [SerializeField] private Transform _leftHandObj;
     [SerializeField] private Transform _rightHandObj;
+    [SerializeField] private float _rayLength = 1.0f;
 
     private StateBot _stateBot;
     private Vector3 _point;
+    private Vector3 _rFpos;
+    private Vector3 _lFpos;
+    private Quaternion _rFrot;
+    private Quaternion _lFrot;
     private Animator _animator;
-    private float _waitTime = 3;
+    private Transform _footR;
+    private Transform _footL;
+    private float _weightFootR = 1.0f;
+    private float _weightFootL = 1.0f;
+    private float _smoothness = 0.5f;
+    private float _offsetY = 0.1f;
+    private float _waitTime = 3.0f;
     private float _stoppingDistance = 2.0f;
     private bool _isPlayerVisible = false;
 
@@ -45,7 +57,6 @@ public sealed class Bot : BaseObjectScene, IExecute
             _stateBot = value;
             switch (value)
             {
-
                 case StateBot.Detected:
                     _isPlayerVisible = true;
                     break;
@@ -66,6 +77,8 @@ public sealed class Bot : BaseObjectScene, IExecute
         _animator = GetComponent<Animator>();
         _animator.SetBool(_isMoving, true);
         _rightHandObj = FindObjectOfType<CharacterController>().transform;
+        _footR = _animator.GetBoneTransform(HumanBodyBones.RightFoot);
+        _footL = _animator.GetBoneTransform(HumanBodyBones.LeftFoot);
         Agent = GetComponent<NavMeshAgent>();
         _timeRemaining = new TimeRemaining(ResetStateBot, _waitTime);
     }
@@ -114,6 +127,21 @@ public sealed class Bot : BaseObjectScene, IExecute
                 _animator.SetIKRotation(AvatarIKGoal.LeftHand, _leftHandObj.rotation);
             }
         }
+
+        //_weightFootR = _animator.GetFloat("Right_Leg");
+        //_weightFootL = _animator.GetFloat("Left_Leg");
+
+        //_animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, _weightFootR);
+        //_animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, _weightFootL);
+
+        //_animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, _weightFootR);
+        //_animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, _weightFootL);
+
+        //_animator.SetIKPosition(AvatarIKGoal.RightFoot, _rFpos + new Vector3(0, _offsetY, 0));
+        //_animator.SetIKPosition(AvatarIKGoal.LeftFoot, _lFpos + new Vector3(0, _offsetY, 0));
+
+        //_animator.SetIKRotation(AvatarIKGoal.RightFoot, _rFrot);
+        //_animator.SetIKRotation(AvatarIKGoal.LeftFoot, _lFrot);
     }
 
     #endregion
@@ -179,9 +207,20 @@ public sealed class Bot : BaseObjectScene, IExecute
                 _isPlayerVisible = false;
                 MovePoint(Target.position);
             }
-
-            //todo потеря персонажа
         }
+
+        //var rPos = _footR.TransformPoint(Vector3.zero);
+        //if (Physics.Raycast(rPos, Vector3.down, out var rightHit, _rayLength, _rayLayer))
+        //{
+        //    _rFpos = Vector3.Lerp(_footR.position, rightHit.point, _smoothness);
+        //    _lFrot = Quaternion.FromToRotation(transform.up, rightHit.normal) * transform.rotation;
+        //}
+        //var lpos = _footL.TransformPoint(Vector3.zero);
+        //if (Physics.Raycast(lpos, Vector3.down, out var leftHit, _rayLength, _rayLayer))
+        //{
+        //    _lFpos = Vector3.Lerp(_footL.position, leftHit.point, _smoothness);
+        //    _lFrot = Quaternion.FromToRotation(transform.up, leftHit.normal) * transform.rotation;
+        //}
     }
 
     private void ResetStateBot()
@@ -191,8 +230,6 @@ public sealed class Bot : BaseObjectScene, IExecute
 
     public void Damage(InfoCollision info)
     {
-        //todo реакция на попадание
-
         if (HP > 0)
         {
             HP -= info.Damage;
