@@ -29,6 +29,8 @@ public sealed class Bot : BaseObjectScene, IExecute
     private Vector3 _lHpos;
     private Quaternion _rFrot;
     private Quaternion _lFrot;
+    private Quaternion _rHrot;
+    private Quaternion _lHrot;
     private Animator _animator;
     private Transform _footR;
     private Transform _footL;
@@ -125,22 +127,27 @@ public sealed class Bot : BaseObjectScene, IExecute
 
     private void OnAnimatorIK()
     {
-        //if (_isPlayerVisible)
-        //{
+        if (_isPlayerVisible)
+        {
             if (Target != null)
             {
                 _animator.SetLookAtWeight(0.4f);
                 _animator.SetLookAtPosition(Target.position);
             }
 
+
+            _lHpos = Vector3.Lerp(_handL.position, _leftHandObj.position, _smoothness);
+            _rHpos = Vector3.Lerp(_handR.position, _rightHandObj.position, _smoothness);
+            _rHrot = Quaternion.FromToRotation(transform.up, _rightHandObj.forward) * transform.rotation;
+            _lHrot = Quaternion.FromToRotation(transform.up, _leftHandObj.forward) * transform.rotation;
             //_rHpos = _animator.GetIKPosition(AvatarIKGoal.RightHand);
             if (_rightHandObj != null)
             {
                 _animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0.4f);
                 _animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0.1f);
-                _animator.SetIKPosition(AvatarIKGoal.RightHand, _rightHandObj.position);
-                _animator.SetIKRotation(AvatarIKGoal.RightHand, _rightHandObj.rotation);
-                //_rHpos = Vector3.Lerp(_handR.position, _rightHandObj.position, _smoothness);
+                _animator.SetIKPosition(AvatarIKGoal.RightHand, _rHpos);
+                _animator.SetIKRotation(AvatarIKGoal.RightHand, _rHrot);
+                
             }
 
             //_lHpos = _animator.GetIKPosition(AvatarIKGoal.LeftHand);
@@ -148,16 +155,18 @@ public sealed class Bot : BaseObjectScene, IExecute
             {
                 _animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
                 _animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 0.1f);
-                _animator.SetIKPosition(AvatarIKGoal.LeftHand, _leftHandObj.position);
-                _animator.SetIKRotation(AvatarIKGoal.LeftHand, _leftHandObj.rotation);
-                //_rHpos = Vector3.Lerp(_handL.position, _leftHandObj.position, _smoothness);
+                _animator.SetIKPosition(AvatarIKGoal.LeftHand, _lHpos);
+                _animator.SetIKRotation(AvatarIKGoal.LeftHand, _lHrot);
+                
+                //_lHrot = Quaternion.FromToRotation(transform.up, leftHit.normal) * transform.rotation;
             }
-        //}
+
+        }
 
         _weightFootR = _animator.GetFloat("Right_Leg");
         _weightFootL = _animator.GetFloat("Left_Leg");
 
-        //LegsIK();
+        LegsIK();
 
         //_weightFootR = _animator.GetFloat("Right_Leg");
         //_weightFootL = _animator.GetFloat("Left_Leg");
@@ -213,6 +222,11 @@ public sealed class Bot : BaseObjectScene, IExecute
             if (Vision.VisionM(transform, Target))
             {
                 StateBot = StateBot.Detected;
+                _isPlayerVisible = true;
+            }
+            else
+            {
+                _isPlayerVisible = false;
             }
         }
         else
@@ -240,18 +254,19 @@ public sealed class Bot : BaseObjectScene, IExecute
             }
         }
 
+
         //var rPos = _footR.TransformPoint(Vector3.zero);
         //if (Physics.Raycast(rPos, Vector3.down, out var rightHit, _rayLength, _rayLayer))
         //{
         //    _rFpos = Vector3.Lerp(_footR.position, rightHit.point, _smoothness);
-        //    _lFrot = Quaternion.FromToRotation(transform.up, rightHit.normal) * transform.rotation;
+        //    _rFrot = Quaternion.FromToRotation(transform.up, rightHit.normal) * transform.rotation;
         //}
         //var lpos = _footL.TransformPoint(Vector3.zero);
         //if (Physics.Raycast(lpos, Vector3.down, out var leftHit, _rayLength, _rayLayer))
         //{
         //    _lFpos = Vector3.Lerp(_footL.position, leftHit.point, _smoothness);
         //    _lFrot = Quaternion.FromToRotation(transform.up, leftHit.normal) * transform.rotation;
-        //}
+        //} 
     }
 
     private void LegsIK()
