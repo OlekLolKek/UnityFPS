@@ -25,11 +25,15 @@ public sealed class Bot : BaseObjectScene, IExecute
     private Vector3 _point;
     private Vector3 _rFpos;
     private Vector3 _lFpos;
+    private Vector3 _rHpos;
+    private Vector3 _lHpos;
     private Quaternion _rFrot;
     private Quaternion _lFrot;
     private Animator _animator;
     private Transform _footR;
     private Transform _footL;
+    private Transform _handL;
+    private Transform _handR;
     private float _weightFootR = 1.0f;
     private float _weightFootL = 1.0f;
     private float _smoothness = 0.5f;
@@ -82,6 +86,8 @@ public sealed class Bot : BaseObjectScene, IExecute
         _rightHandObj = FindObjectOfType<CharacterController>().transform;
         _footR = _animator.GetBoneTransform(HumanBodyBones.RightFoot);
         _footL = _animator.GetBoneTransform(HumanBodyBones.LeftFoot);
+        _handL = _animator.GetBoneTransform(HumanBodyBones.RightHand);
+        _handR = _animator.GetBoneTransform(HumanBodyBones.LeftHand);
         Agent = GetComponent<NavMeshAgent>();
         _timeRemaining = new TimeRemaining(ResetStateBot, _waitTime);
     }
@@ -119,35 +125,39 @@ public sealed class Bot : BaseObjectScene, IExecute
 
     private void OnAnimatorIK()
     {
-        if (_isPlayerVisible)
-        {
+        //if (_isPlayerVisible)
+        //{
             if (Target != null)
             {
                 _animator.SetLookAtWeight(0.4f);
                 _animator.SetLookAtPosition(Target.position);
             }
 
+            //_rHpos = _animator.GetIKPosition(AvatarIKGoal.RightHand);
             if (_rightHandObj != null)
             {
                 _animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0.4f);
                 _animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0.1f);
                 _animator.SetIKPosition(AvatarIKGoal.RightHand, _rightHandObj.position);
                 _animator.SetIKRotation(AvatarIKGoal.RightHand, _rightHandObj.rotation);
+                //_rHpos = Vector3.Lerp(_handR.position, _rightHandObj.position, _smoothness);
             }
 
+            //_lHpos = _animator.GetIKPosition(AvatarIKGoal.LeftHand);
             if (_leftHandObj != null)
             {
                 _animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
                 _animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 0.1f);
                 _animator.SetIKPosition(AvatarIKGoal.LeftHand, _leftHandObj.position);
                 _animator.SetIKRotation(AvatarIKGoal.LeftHand, _leftHandObj.rotation);
+                //_rHpos = Vector3.Lerp(_handL.position, _leftHandObj.position, _smoothness);
             }
-        }
+        //}
 
         _weightFootR = _animator.GetFloat("Right_Leg");
         _weightFootL = _animator.GetFloat("Left_Leg");
 
-        LegsIK();
+        //LegsIK();
 
         //_weightFootR = _animator.GetFloat("Right_Leg");
         //_weightFootL = _animator.GetFloat("Left_Leg");
