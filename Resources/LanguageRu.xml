@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Settings>
+
+  <meta>
+    <Name>Oleg</Name>
+    <language>Russian</language>
+  </meta>
+
+  <group id="MainMenuItems">
+
+    <string id="NewGame">
+      <text>Новая игра</text>
+    </string>
+
+    <string id="Continue">
+      <text>Продолжить</text>
+    </string>
+
+    <string id="Options">
+      <text>Настройки</text>
+    </string>
+
+    <string id="Quit">
+      <text>Выход</text>
+    </string>
+
+  </group>
+
+  <group id="OptionsMenuItems">
+
+    <string id="Video">
+      <text>Графика</text>
+    </string>
+
+    <string id="Sound">
+      <text>Звук</text>
+    </string>
+
+    <string id="Game">
+      <text>Игра</text>
+    </string>
+
+    <string id="Back">
+      <text>Назад</text>
+    </string>
+
+  </group>
+
+  <group id="VideoOptionsMenuItems">
+
+    <string id="CurrentName">
+      <text>Графика</text>
+    </string>
+
+    <string id="SoftParticles">
+      <text>Звук</text>
+    </string>
+
+    <string id="ShadowQuality">
+      <text>Игра</text>
+    </string>
+
+    <string id="SaveAndReturn">
+      <text>Назад</text>
+    </string>
+
+  </group>
+
+</Settings>

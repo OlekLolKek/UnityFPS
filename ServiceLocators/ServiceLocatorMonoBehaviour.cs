@@ -1,11 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Object = UnityEngine.Object;
+
 
 public static class ServiceLocatorMonoBehaviour
 {
     #region Fields
 
-    private static Dictionary<object, object> _servicecontainer = null;
+    private static Dictionary<Type, Object> _servicecontainer = null;
 
     #endregion
 
@@ -16,7 +20,7 @@ public static class ServiceLocatorMonoBehaviour
     {
         if (_servicecontainer == null)
         {
-            _servicecontainer = new Dictionary<object, object>();
+            _servicecontainer = new Dictionary<Type, Object>();
         }
 
         if (!_servicecontainer.ContainsKey(typeof(T)))
@@ -47,6 +51,17 @@ public static class ServiceLocatorMonoBehaviour
             _servicecontainer.Add(typeof(T), go.GetComponent<T>());
         }
         return (T)_servicecontainer[typeof(T)];
+    }
+
+    public static void Cleanup()
+    {
+        var objects = _servicecontainer.Values.ToList();
+        foreach (var t in objects)
+        {
+           Object.Destroy(t);
+        }
+
+        _servicecontainer.Clear();
     }
 
     #endregion

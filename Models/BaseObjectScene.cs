@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+
 public abstract class BaseObjectScene : MonoBehaviour
 {
     #region Fields

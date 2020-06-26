@@ -67,5 +67,11 @@ public sealed class Controllers : IInitialization
         ServiceLocator.Resolve<BotController>().On();
     }
 
+    private void Cleanup()
+    {
+        ServiceLocator.Cleanup();
+        ServiceLocatorMonoBehaviour.Cleanup();
+    }
+
     #endregion
 }

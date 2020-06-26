@@ -143,7 +143,7 @@ public sealed class Bot : BaseObjectScene, IExecute
             //_rHpos = _animator.GetIKPosition(AvatarIKGoal.RightHand);
             if (_rightHandObj != null)
             {
-                _animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0.4f);
+                _animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1.0f);
                 _animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0.1f);
                 _animator.SetIKPosition(AvatarIKGoal.RightHand, _rHpos);
                 _animator.SetIKRotation(AvatarIKGoal.RightHand, _rHrot);
