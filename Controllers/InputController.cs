@@ -5,8 +5,9 @@ public sealed class InputController : BaseController, IExecute
 {
     #region Fields
 
+    private KeyCode _pauseButton = KeyCode.Escape;
     private KeyCode _switchFlashlight = KeyCode.F;
-    private KeyCode _cancel = KeyCode.Escape;
+    private KeyCode _cancel = KeyCode.X;
     private KeyCode _reloadMag = KeyCode.R;
     private KeyCode _switchShootingMode = KeyCode.B;
     private KeyCode _savePlayer = KeyCode.C;
@@ -32,6 +33,12 @@ public sealed class InputController : BaseController, IExecute
     public void Execute()
     {
         if (!IsActive) return;
+
+        if (Input.GetKeyDown(_pauseButton))
+        {
+            ServiceLocator.Resolve<PauseController>().Pause();
+        }
+
         if (Input.GetKeyDown(_switchFlashlight))
         {
             ServiceLocator.Resolve<FlashlightController>().Switch(ServiceLocator.Resolve<Inventory>().Flashlight);

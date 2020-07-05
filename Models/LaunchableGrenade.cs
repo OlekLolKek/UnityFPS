@@ -8,6 +8,7 @@ public sealed class LaunchableGrenade : Ammunition
     [SerializeField] private AudioClip _clip;
     [SerializeField] private float _radius = 5;
     [SerializeField] private float _force = 1500;
+    [SerializeField] private AudioSource _explosionAudioSource;
 
     #endregion
 
@@ -60,6 +61,8 @@ public sealed class LaunchableGrenade : Ammunition
             }
         }
         AudioSource.PlayClipAtPoint(_clip, transform.position);
+        //_explosionAudioSource.Play();
+        //_explosionAudioSource.PlayOneShot(_clip);
         Destroy(gameObject);
     }
 

@@ -1,27 +1,27 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Settings>
 
   <meta>
     <Name>Oleg</Name>
-    <language>Russian</language>
+    <language>English</language>
   </meta>
 
   <group id="MainMenuItems">
 
     <string id="NewGame">
-      <text>Новая игра</text>
+      <text>New Game</text>
     </string>
 
     <string id="Continue">
-      <text>Продолжить</text>
+      <text>Continue</text>
     </string>
 
     <string id="Options">
-      <text>Настройки</text>
+      <text>Settings</text>
     </string>
 
     <string id="Quit">
-      <text>Выход</text>
+      <text>Exit</text>
     </string>
 
   </group>
@@ -29,19 +29,19 @@
   <group id="OptionsMenuItems">
 
     <string id="Video">
-      <text>Графика</text>
+      <text>Video</text>
     </string>
 
     <string id="Sound">
-      <text>Звук</text>
+      <text>Sound</text>
     </string>
 
     <string id="Game">
-      <text>Игра</text>
+      <text>Game</text>
     </string>
 
     <string id="Back">
-      <text>Назад</text>
+      <text>Back</text>
     </string>
 
   </group>
@@ -49,19 +49,19 @@
   <group id="VideoOptionsMenuItems">
 
     <string id="CurrentName">
-      <text>Имя</text>
+      <text>Current</text>
     </string>
 
     <string id="SoftParticles">
-      <text>Частицы</text>
+      <text>Soft Particles</text>
     </string>
 
     <string id="ShadowQuality">
-      <text>Качество теней</text>
+      <text>Shadow Quality</text>
     </string>
 
     <string id="SaveAndReturn">
-      <text>Сохранить и выйти</text>
+      <text>Save and return</text>
     </string>
 
   </group>
