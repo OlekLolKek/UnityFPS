@@ -18,6 +18,7 @@ public sealed class Interface : MonoBehaviour
 
     private MainMenu _mainMenu;
     private OptionsMenu _optionsMenu;
+    private TestMenu _testMenu;
     //private VideoOptions _videoOptions;
     //private GameOptions _gameOptions;
     //private AudioOptions _audioOptions;
@@ -34,6 +35,7 @@ public sealed class Interface : MonoBehaviour
         InterfaceResources = GetComponent<InterfaceResources>();
         _mainMenu = GetComponent<MainMenu>();
         _optionsMenu = GetComponent<OptionsMenu>();
+        _testMenu = GetComponent<TestMenu>();
         //_videoOptions = GetComponent<VideoOptions>();
         //_gameOptions = GetComponent<GameOptions>();
         //_audioOptions = GetComponent<AudioOptions>();
@@ -48,9 +50,16 @@ public sealed class Interface : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (!Input.GetKeyDown(KeyCode.Escape)) return;
+        if (_currentMenu != null) return;
+
+        if (_currentMenu._isShown)
         {
-            //
+            _currentMenu.Hide();
+        }
+        else
+        {
+            _currentMenu.Show();
         }
     }
 
@@ -79,31 +88,17 @@ public sealed class Interface : MonoBehaviour
             case InterfaceObject.OptionsMenu:
                 _currentMenu = _optionsMenu;
                 break;
-            //case InterfaceObject.VideoOptions:
-            // if (_currentMenu != null) _currentMenu.Hide();
-            // _currentMenu = _videoOptions;
-            // _currentMenu.Show();
-            // break;
-            //case InterfaceObject.AudioOptions:
-            // if (_currentMenu != null) _currentMenu.Hide();
-            // _currentMenu = _audioOptions;
-            // _currentMenu.Show();
-            // break;
-            //case InterfaceObject.GameOptions:
-            // if (_currentMenu != null) _currentMenu.Hide();
-            // _currentMenu = _gameOptions;
-            // _currentMenu.Show();
-            // break;
-            //case InterfaceObject.MenuPause:
-            // if (_currentMenu != null) _currentMenu.Hide();
-            // _currentMenu = _menuPause;
-            // _currentMenu.Show();
-            // break;
-            //case InterfaceObject.OptionsPauseMenu:
-            // if (_currentMenu != null) _currentMenu.Hide();
-            // _currentMenu = _optionsPauseMenu;
-            // _currentMenu.Show();
-            // break;
+            case InterfaceObject.VideoOptions:
+                break;
+            case InterfaceObject.GameOptions:
+                break;
+            case InterfaceObject.AudioOptions:
+                break;
+            case InterfaceObject.TestMenu:
+                _currentMenu = _testMenu;
+                break;
+            case InterfaceObject.MenuPause:
+                break;
             default:
                 break;
         }
@@ -139,33 +134,27 @@ public sealed class Interface : MonoBehaviour
     {
         AsyncOperation async = SceneManager.LoadSceneAsync(lvl);
         StartCoroutine(LoadSceneAsync(async));
-
-        Debug.Log("Загрузка сцены int");
     }
 
     public void LoadSceneAsync(Scene lvl)
     {
         AsyncOperation async = SceneManager.LoadSceneAsync(lvl.buildIndex);
         StartCoroutine(LoadSceneAsync(async));
-
-        Debug.Log("Загрузка сцены Scene");
     }
 
     public void LoadSceneAsync(string lvl)
     {
         AsyncOperation async = SceneManager.LoadSceneAsync(lvl);
         StartCoroutine(LoadSceneAsync(async));
-
-        Debug.Log("Загрузка сцены string");
     }
 
     private IEnumerator LoadSceneAsync(AsyncOperation async)
     {
-        ProgressBarEnabled(); //todo
+        ProgressBarEnabled();
         async.allowSceneActivation = false;
         while (!async.isDone)
         {
-            ProgressBarSetValue(async.progress + 0.1f); //todo
+            ProgressBarSetValue(async.progress + 0.1f);
             float progress = async.progress * 100.0f;
             if (async.progress < 0.9f && Mathf.RoundToInt(progress) != 100)
             {
@@ -175,7 +164,7 @@ public sealed class Interface : MonoBehaviour
             {
                 if (async.allowSceneActivation) yield return null;
                 async.allowSceneActivation = true;
-                ProgressBarDisable(); //todo
+                ProgressBarDisable();
             }
             yield return null;
         }

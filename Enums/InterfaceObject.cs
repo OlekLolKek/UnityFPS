@@ -6,5 +6,6 @@
     GameOptions,
     AudioOptions,
     MenuPause,
-    OptionsPauseMenu
+    OptionsPauseMenu,
+    TestMenu
 }
