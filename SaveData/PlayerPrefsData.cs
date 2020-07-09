@@ -45,5 +45,10 @@ public class PlayerPrefsData : IData<SerializableGameObject>
         PlayerPrefs.DeleteAll();
     }
 
+    public void SetOptions(string path)
+    {
+        throw new System.NotImplementedException();
+    }
+
     #endregion
 }

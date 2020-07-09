@@ -44,5 +44,10 @@ public class BinarySerializationData<T> : IData<T>
         return result;
     }
 
+    public void SetOptions(string path)
+    {
+        throw new NotImplementedException();
+    }
+
     #endregion
 }

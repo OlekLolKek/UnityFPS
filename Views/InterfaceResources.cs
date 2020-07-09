@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using UnityEngine.UI;
-
+using UnityEngine.Audio;
 
 public class InterfaceResources : MonoBehaviour
 {
@@ -9,7 +9,9 @@ public class InterfaceResources : MonoBehaviour
 
     public ButtonUI ButtonPrefab { get; private set; }
     public Canvas MainCanvas { get; private set; }
+    public LayoutGroup MainPanel { get; private set; }
     public SliderUI ProgressbarPrefab { get; private set; }
+    public AudioMixer AudioMixer { get; private set; }
 
     #endregion
 
@@ -20,7 +22,9 @@ public class InterfaceResources : MonoBehaviour
     {
         ButtonPrefab = Resources.Load<ButtonUI>("Button");
         MainCanvas = FindObjectOfType<Canvas>();
+        MainPanel = MainCanvas.GetComponentInChildren<LayoutGroup>();
         ProgressbarPrefab = Resources.Load<SliderUI>("Progressbar");
+        AudioMixer = Resources.Load<AudioMixer>("MainAudioMixer");
     }
 
     #endregion

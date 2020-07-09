@@ -19,5 +19,10 @@ public class JsonData<T> : IData<T>
         return JsonUtility.FromJson<T>(str);
     }
 
+    public void SetOptions(string path)
+    {
+        throw new System.NotImplementedException();
+    }
+
     #endregion
 }

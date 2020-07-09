@@ -12,6 +12,7 @@ public class CreateInterface : MonoBehaviour
         CreateComponent();
         gameObject.AddComponent<MainMenu>();
         gameObject.AddComponent<OptionsMenu>();
+        gameObject.AddComponent<TestMenu>();
         Clear();
     }
 

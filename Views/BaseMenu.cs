@@ -38,9 +38,26 @@ public abstract class BaseMenu : MonoBehaviour
 
     protected T CreateControl<T>(T prefab, string text) where T : Object, IControlText
     {
-        if (!prefab) throw new Exception(string.Format("Отсутствует ссылка на {0}", typeof(T)));
+        if (!prefab) throw new Exception(string.Format($"Отсутствует ссылка на {typeof(T)}"));
         var tempControl = Instantiate(prefab, _interface.InterfaceResources.MainPanel.transform.position, Quaternion.identity,
             _interface.InterfaceResources.MainPanel.transform);
+
+        if (tempControl.GetText != null)
+        {
+            tempControl.GetText.text = text;
+        }
+        return tempControl;
+    }
+
+    protected T CreateControlText<T>(T prefab, string text) where T : Object, IControlText
+    {
+        var tempControl = CreateControl<T>(prefab, text);
+
+        if (tempControl.GetText != null)
+        {
+            tempControl.GetText.text = text;
+        }
+        return tempControl;
     }
 
     public abstract void Hide();
