@@ -6,7 +6,7 @@ public class VideoSettings
 {
     #region Fields
 
-    public int CurrentSettings { get; set; }    
+    public int CurrentSettings { get; set; }
     public List<VideoSettingsItems> Items { get; set; }
 
     #endregion

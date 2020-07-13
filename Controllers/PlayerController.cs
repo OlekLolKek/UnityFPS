@@ -21,8 +21,8 @@
 
     public void Initialization()
     {
-        UIInterface.HealthBarUI.SetActive(true);
-        UIInterface.HealthTextUi.SetActive(true);
+        //UIInterface.HealthBarUI.SetActive(true);
+        //UIInterface.HealthTextUi.SetActive(true);
     }
 
     public void Execute()

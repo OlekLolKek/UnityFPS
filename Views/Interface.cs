@@ -115,7 +115,6 @@ public sealed class Interface : MonoBehaviour
 
         if (_currentMenu != null)
         {
-            Debug.Log("_currentMenu != null");
             _currentMenu.Show();
             _interfaceObjects.Push(menuItem);
         }

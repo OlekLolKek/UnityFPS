@@ -47,15 +47,9 @@ public sealed class SelectionController : BaseController, IExecute
         }
         if (_isSelectedObj)
         {
-            //Действие над объектом
-
             switch (_selectedObj)
             {
                 case Weapon aim:
-
-                    //в инвентарь
-
-                    //Inventory.AddWeapon(aim);
                     break;
                 case Wall wall:
                     break;
@@ -69,11 +63,13 @@ public sealed class SelectionController : BaseController, IExecute
         _selectedObj = obj.GetComponent<ISelectObj>();
         if (_selectedObj != null)
         {
+            Debug.Log("_selectedObj != null");
             UIInterface.SelectionObjMessageUI.Text = _selectedObj.GetMessage();
             _isSelectedObj = true;
         }
         else
         {
+            Debug.Log(obj.name);
             UIInterface.SelectionObjMessageUI.Text = String.Empty;
             _isSelectedObj = false;
         }

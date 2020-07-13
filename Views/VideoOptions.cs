@@ -4,6 +4,7 @@ using TMPro;
 using System.Windows.Markup;
 using System.Linq;
 using System.Collections.Generic;
+using UnityEngine.Events;
 
 public class VideoOptions : BaseMenu
 {
@@ -59,16 +60,17 @@ public class VideoOptions : BaseMenu
                     {
                         Debug.Log("case CurrentName");
                         _currentVideoSettingsDD.GetControl.ClearOptions();
-                        _shadowQualityDD.GetControl.AddOptions(new List<string>(QualitySettings.names));
+                        _currentVideoSettingsDD.GetControl.AddOptions(new List<string>(QualitySettings.names));
+                        _currentVideoSettingsDD.GetControl.onValueChanged.AddListener(SetSettings);
+                        SetSettings(QualitySettings.GetQualityLevel());
                         _elementsOfInterface[i] = _currentVideoSettingsDD;
                         break;
                     }
                 case (int)VideoOptionsMenuItems.SoftParticles:
                     {
                         Debug.Log("case Particles");
-                        Debug.Log(LangManager.Instance.Text("VideoOptionsMenuItems", "SoftParticles"));
-                        Debug.Log(_softParticlesToggle.GetText);
-                        //_softParticlesToggle.GetText.text = LangManager.Instance.Text("VideoOptionsMenuItems", "SoftParticles");
+                        _softParticlesToggle.GetText.text = LangManager.Instance.Text("VideoOptionsMenuItems", "SoftParticles");
+                        _softParticlesToggle.GetControl.onValueChanged.AddListener(SoftParticles);
                         _elementsOfInterface[i] = _softParticlesToggle;
                         break;
                     }
@@ -83,6 +85,7 @@ public class VideoOptions : BaseMenu
                             LangManager.Instance.Text("ShadowsOptions", "HardAndSoft"),
                         };
                         _shadowQualityDD.GetControl.AddOptions(shadowLevels);
+                        _shadowQualityDD.GetControl.onValueChanged.AddListener(ShadowQuality);
                         _elementsOfInterface[i] = _shadowQualityDD;
                         break;
                     }
@@ -127,29 +130,41 @@ public class VideoOptions : BaseMenu
         {
             if (control == null)
             {
-                Debug.Log("control == null");
                 continue;
             }
             if (control.Instance.name == VideoOptionsMenuItems.CurrentName.ToString() && control is DropdownUI)
             {
-                Debug.Log("control.Instance.name == VideoOptionsMenuItems.CurrentName.ToString()");
                 var temp = control as DropdownUI;
                 temp.GetControl.value = arg;
                 temp.GetControl.RefreshShownValue();
             }
             else if (control.Instance.name == VideoOptionsMenuItems.SoftParticles.ToString() && control is ToggleUI)
             {
-                Debug.Log("control.Instance.name == VideoOptionsMenuItems.SoftParticles.ToString()");
                 (control as ToggleUI).GetControl.isOn = VideoSettings.Items[arg].SoftParticles;
             }
             else if (control.Instance.name == VideoOptionsMenuItems.ShadowQuality.ToString() && control is DropdownUI)
             {
-                Debug.Log("control.Instance.name == VideoOptionsMenuItems.ShadowQuality.ToString()");
                 var temp = control as DropdownUI;
-                temp.GetControl.value = (int)VideoSettings.Items[arg].ShadowQuality;
+                temp.GetControl.value = (int)QualitySettings.shadows;
+                Debug.Log((int)QualitySettings.shadows);
                 temp.GetControl.RefreshShownValue();
             }
         }
+    }
+
+    private void SetSettings(int value)
+    {
+        QualitySettings.SetQualityLevel(value);
+    }
+
+    private void SoftParticles(bool value)
+    {
+        QualitySettings.softParticles = value;
+    }
+
+    private void ShadowQuality(int value)
+    {
+        QualitySettings.shadows = (ShadowQuality)value;
     }
 
     private void SaveAndReturn()

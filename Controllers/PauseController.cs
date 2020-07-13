@@ -11,7 +11,9 @@ public sealed class PauseController : BaseController, IInitialization
     [SerializeField] private AudioMixerGroup _group;
     [SerializeField] private Text _text;
 
-    private PlayerController _controller;
+    private PlayerController _player;
+    private InputController _input;
+    private WeaponController _weapon;
     private AudioMixerSnapshot _pausedSnapshot;
     private AudioMixerSnapshot _playingSnapshot;
 
@@ -26,7 +28,9 @@ public sealed class PauseController : BaseController, IInitialization
     {
         _audioMixer = (AudioMixer)Resources.Load("MainAudioMixer");
         _audioMixer.SetFloat("MyExposedParam", 0.1f);
-        _controller = ServiceLocator.Resolve<PlayerController>();
+        _player = ServiceLocator.Resolve<PlayerController>();
+        _input = ServiceLocator.Resolve<InputController>();
+        _weapon = ServiceLocator.Resolve<WeaponController>();
         _pausedSnapshot = _audioMixer.FindSnapshot("Paused");
         _playingSnapshot = _audioMixer.FindSnapshot("Playing");
     }
@@ -38,15 +42,17 @@ public sealed class PauseController : BaseController, IInitialization
 
         if (_isPaused)
         {
-            _controller.Off();
+            _input.IsGamePaused = true;
+            _player.Off();
             Time.timeScale = 0.0f;
-            _pausedSnapshot.TransitionTo(0.0001f);
+            //_pausedSnapshot.TransitionTo(0.0001f);
         }
         else
         {
-            _controller.On();
+            _input.IsGamePaused = false;
+            _player.On();
             Time.timeScale = 1.0f;
-            _pausedSnapshot.TransitionTo(0.0001f);
+            //_pausedSnapshot.TransitionTo(0.0001f);
         }
     }
 
