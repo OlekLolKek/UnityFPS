@@ -1,17 +1,17 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 
 public sealed class MainMenu : BaseMenu
 {
     #region Fields
 
-    [SerializeField] private GameObject _mainPanel;
-
-    [SerializeField] private ButtonUI _newGame;
-    [SerializeField] private ButtonUI _continue;
-    [SerializeField] private ButtonUI _options;
-    [SerializeField] private ButtonUI _quit;
+    [SerializeField] private GameObject _instance;
+    [SerializeField] private ButtonUI _buttonStartGame;
+    [SerializeField] private ButtonUI _buttonContinue;
+    [SerializeField] private ButtonUI _buttonOptions;
+    [SerializeField] private ButtonUI _buttonQuit;
 
     #endregion
 
@@ -20,22 +20,17 @@ public sealed class MainMenu : BaseMenu
 
     private void Start()
     {
-        _newGame.GetText.text = LangManager.Instance.Text("MainMenuItems", "NewGame");
-        _newGame.GetControl.onClick.AddListener(delegate
-        {
-            LoadNewGame(SceneManagerHelper.Instance.Scenes.Game.SceneAsset.name);
-        });
+        _buttonStartGame.GetText.text = LangManager.Instance.Text("MainMenuItems", "NewGame");
+        _buttonStartGame.GetControl.onClick.AddListener(delegate { LoadNewGame(SceneManagerHelper.Instance.Scenes.Game.SceneAsset.name); });
 
-        _continue.GetText.text = LangManager.Instance.Text("MainMenuItems", "Continue");
-        _continue.SetInteractible(false);
-        _options.GetText.text = LangManager.Instance.Text("MainMenuItems", "Options");
-        _options.SetInteractible(false);
+        _buttonContinue.GetText.text = LangManager.Instance.Text("MainMenuItems", "Continue");
+        _buttonContinue.SetInteractible(false);
 
-        _quit.GetText.text = LangManager.Instance.Text("MainMenuItems", "Quit");
-        _quit.GetControl.onClick.AddListener(delegate
-        {
-            _interface.QuitGame();
-        });
+        _buttonOptions.GetText.text = LangManager.Instance.Text("MainMenuItems", "Options");
+        _buttonOptions.GetControl.onClick.AddListener(ShowOptions);
+
+        _buttonQuit.GetText.text = LangManager.Instance.Text("MainMenuItems", "Quit");
+        _buttonQuit.GetControl.onClick.AddListener(delegate { _interface.QuitGame(); });
     }
 
     #endregion
@@ -45,15 +40,15 @@ public sealed class MainMenu : BaseMenu
 
     public override void Hide()
     {
-        if (_isShown) return;
-        _mainPanel.gameObject.SetActive(false);
+        if (!_isShown) return;
+        _instance.SetActive(false);
         _isShown = false;
     }
 
     public override void Show()
     {
         if (_isShown) return;
-        _mainPanel.gameObject.SetActive(true);
+        _instance.SetActive(true);
         _isShown = true;
     }
 
@@ -70,8 +65,6 @@ public sealed class MainMenu : BaseMenu
 
     private void SceneManagerOnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
-        //init game;
-
         SceneManager.sceneLoaded -= SceneManagerOnSceneLoaded;
     }
 

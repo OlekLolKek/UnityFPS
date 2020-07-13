@@ -64,6 +64,26 @@
       <text>Save and return</text>
     </string>
 
+    <string id="Back">
+      <text>Return</text>
+    </string>
+
+  </group>
+
+  <group id="ShadowsOptions">
+
+    <string id="Disable">
+      <text>Disable Shadows</text>
+    </string>
+
+    <string id="Hard">
+      <text>Hard shadows</text>
+    </string>
+
+    <string id="HardAndSoft">
+      <text>Hard and soft shadows</text>
+    </string>
+
   </group>
 
 </Settings>

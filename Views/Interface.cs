@@ -19,7 +19,7 @@ public sealed class Interface : MonoBehaviour
     private MainMenu _mainMenu;
     private OptionsMenu _optionsMenu;
     private TestMenu _testMenu;
-    //private VideoOptions _videoOptions;
+    private VideoOptions _videoOptions;
     //private GameOptions _gameOptions;
     //private AudioOptions _audioOptions;
     //private MenuPause _menuPause;
@@ -36,7 +36,7 @@ public sealed class Interface : MonoBehaviour
         _mainMenu = GetComponent<MainMenu>();
         _optionsMenu = GetComponent<OptionsMenu>();
         _testMenu = GetComponent<TestMenu>();
-        //_videoOptions = GetComponent<VideoOptions>();
+        _videoOptions = GetComponent<VideoOptions>();
         //_gameOptions = GetComponent<GameOptions>();
         //_audioOptions = GetComponent<AudioOptions>();
         //_menuPause = GetComponent<MenuPause>();
@@ -79,16 +79,26 @@ public sealed class Interface : MonoBehaviour
 
     public void Execute(InterfaceObject menuItem) //добавить отмену
     {
-        if (_currentMenu != null) _currentMenu.Hide();
+        if (_currentMenu != null)
+        {
+            _currentMenu.Hide();
+            Debug.Log($"Hidden {_currentMenu}");
+            Debug.Log(_currentMenu.isActiveAndEnabled);
+        }
+        Debug.Log("Switch started");
         switch(menuItem)
         {
             case InterfaceObject.MainMenu:
                 _currentMenu = _mainMenu;
+                Debug.Log("_currentMenu = _mainMenu");
                 break;
             case InterfaceObject.OptionsMenu:
                 _currentMenu = _optionsMenu;
+                Debug.Log("_currentMenu = _optionsMenu");
                 break;
             case InterfaceObject.VideoOptions:
+                _currentMenu = _videoOptions;
+                Debug.Log("_currentMenu = _videoOptions");
                 break;
             case InterfaceObject.GameOptions:
                 break;
@@ -105,10 +115,11 @@ public sealed class Interface : MonoBehaviour
 
         if (_currentMenu != null)
         {
+            Debug.Log("_currentMenu != null");
             _currentMenu.Show();
             _interfaceObjects.Push(menuItem);
         }
-    }    
+    }
 
     public void ProgressBarSetValue(float value)
     {

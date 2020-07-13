@@ -2,6 +2,8 @@
 using UnityEngine;
 using TMPro;
 using System.Windows.Markup;
+using System.Linq;
+using System.Collections.Generic;
 
 public class VideoOptions : BaseMenu
 {
@@ -23,6 +25,13 @@ public class VideoOptions : BaseMenu
 
     private int _selectSettings;
     private VideoSettings _videoSettings;
+
+    [SerializeField] private GameObject _instance;
+    [SerializeField] private DropdownUI _currentVideoSettingsDD;
+    [SerializeField] private DropdownUI _shadowQualityDD;
+    [SerializeField] private ToggleUI _softParticlesToggle;
+    [SerializeField] private ButtonUI _backButton;
+    [SerializeField] private ButtonUI _saveAndReturnButton;
 
     #endregion
 
@@ -48,32 +57,57 @@ public class VideoOptions : BaseMenu
             {
                 case (int)VideoOptionsMenuItems.CurrentName:
                     {
+                        Debug.Log("case CurrentName");
+                        _currentVideoSettingsDD.GetControl.ClearOptions();
+                        _shadowQualityDD.GetControl.AddOptions(new List<string>(QualitySettings.names));
+                        _elementsOfInterface[i] = _currentVideoSettingsDD;
                         break;
                     }
                 case (int)VideoOptionsMenuItems.SoftParticles:
                     {
+                        Debug.Log("case Particles");
+                        Debug.Log(LangManager.Instance.Text("VideoOptionsMenuItems", "SoftParticles"));
+                        Debug.Log(_softParticlesToggle.GetText);
+                        //_softParticlesToggle.GetText.text = LangManager.Instance.Text("VideoOptionsMenuItems", "SoftParticles");
+                        _elementsOfInterface[i] = _softParticlesToggle;
                         break;
                     }
                 case (int)VideoOptionsMenuItems.ShadowQuality:
                     {
+                        Debug.Log("case Shadow");
+                        _shadowQualityDD.GetControl.ClearOptions();
+                        List<string> shadowLevels = new List<string>
+                        {
+                            LangManager.Instance.Text("ShadowsOptions", "Disable"),
+                            LangManager.Instance.Text("ShadowsOptions", "Hard"),
+                            LangManager.Instance.Text("ShadowsOptions", "HardAndSoft"),
+                        };
+                        _shadowQualityDD.GetControl.AddOptions(shadowLevels);
+                        _elementsOfInterface[i] = _shadowQualityDD;
                         break;
                     }
                 case (int)VideoOptionsMenuItems.SaveAndReturn:
                     {
-                        var tempControl =
-                            CreateControl(_interface.InterfaceResources.ButtonPrefab, LangManager.Instance.Text("VideoOptionsMenuItems", "SaveAndReturn"));
-                        tempControl.GetControl.onClick.AddListener(SaveAndReturn);
-                        _elementsOfInterface[i] = tempControl;
+                        Debug.Log("case Save&return");
+                        _saveAndReturnButton.GetText.text = LangManager.Instance.Text("VideoOptionsMenuItems", "SaveAndReturn");
+                        _saveAndReturnButton.GetControl.onClick.AddListener(SaveAndReturn);
+                        _elementsOfInterface[i] = _saveAndReturnButton;
                         break;
                     }
                 case (int)VideoOptionsMenuItems.Back:
                     {
-                        var tempControl = CreateControl(_interface.InterfaceResources.ButtonPrefab, LangManager.Instance.Text("VideoOptionsMenuItems", "Back"));
-
-                        tempControl.GetControl.onClick.AddListener(Back);
-                        _elementsOfInterface[i] = tempControl;
+                        Debug.Log("case Back");
+                        _backButton.GetText.text = LangManager.Instance.Text("VideoOptionsMenuItems", "Back");
+                        _backButton.GetControl.onClick.AddListener(Back);
+                        _elementsOfInterface[i] = _backButton;
                         break;
                     }
+
+                    //Debug.Log("case Save&return");
+                    //var tempControl = CreateControl(_saveAndReturnButton, LangManager.Instance.Text("VideoOptionsMenuItems", "SaveAndReturn"));
+                    //tempControl.GetControl.onClick.AddListener(SaveAndReturn);
+                    //_elementsOfInterface[i] = tempControl;
+                    //break;
             }
         }
         if (_elementsOfInterface.Length < 0) return;
@@ -91,19 +125,26 @@ public class VideoOptions : BaseMenu
         _selectSettings = arg;
         foreach (var control in _elementsOfInterface)
         {
-            if (control == null) continue;
+            if (control == null)
+            {
+                Debug.Log("control == null");
+                continue;
+            }
             if (control.Instance.name == VideoOptionsMenuItems.CurrentName.ToString() && control is DropdownUI)
             {
+                Debug.Log("control.Instance.name == VideoOptionsMenuItems.CurrentName.ToString()");
                 var temp = control as DropdownUI;
                 temp.GetControl.value = arg;
                 temp.GetControl.RefreshShownValue();
             }
             else if (control.Instance.name == VideoOptionsMenuItems.SoftParticles.ToString() && control is ToggleUI)
             {
+                Debug.Log("control.Instance.name == VideoOptionsMenuItems.SoftParticles.ToString()");
                 (control as ToggleUI).GetControl.isOn = VideoSettings.Items[arg].SoftParticles;
             }
             else if (control.Instance.name == VideoOptionsMenuItems.ShadowQuality.ToString() && control is DropdownUI)
             {
+                Debug.Log("control.Instance.name == VideoOptionsMenuItems.ShadowQuality.ToString()");
                 var temp = control as DropdownUI;
                 temp.GetControl.value = (int)VideoSettings.Items[arg].ShadowQuality;
                 temp.GetControl.RefreshShownValue();
@@ -129,7 +170,8 @@ public class VideoOptions : BaseMenu
     public override void Hide()
     {
         if (!_isShown) return;
-        Clear(_elementsOfInterface);
+        //Clear(_elementsOfInterface);
+        _instance.SetActive(false);
         _isShown = false;
     }
 
@@ -138,6 +180,7 @@ public class VideoOptions : BaseMenu
         if (_isShown) return;
         var tempMenuItems = System.Enum.GetNames(typeof(VideoOptionsMenuItems));
         CreateMenu(tempMenuItems);
+        _instance.SetActive(true);
         Call(QualitySettings.GetQualityLevel());
         _isShown = true;
     }

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+
 
 public class LightPointer : MonoBehaviour
 {
@@ -9,14 +7,24 @@ public class LightPointer : MonoBehaviour
 
     [SerializeField] private Light _mouseLight;
 
+    private int _quality;
+
     #endregion
 
 
     #region UnityMethods
 
+    private void Start()
+    {
+        _quality = QualitySettings.GetQualityLevel();
+    }
+
     private void Update()
     {
-        LightMouse();
+        if (_quality > 3)
+        {
+            LightMouse();
+        }
     }
 
     #endregion
@@ -35,10 +43,6 @@ public class LightPointer : MonoBehaviour
             if (_mouseLight != null)
             {
                 _mouseLight.transform.position = hit.point;
-            }
-            else
-            {
-                throw new Exception($"Нет префаба на компоненте {typeof(CreateMine)} {gameObject.name}");
             }
         }
     }

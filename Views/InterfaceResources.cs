@@ -12,6 +12,8 @@ public class InterfaceResources : MonoBehaviour
     public LayoutGroup MainPanel { get; private set; }
     public SliderUI ProgressbarPrefab { get; private set; }
     public AudioMixer AudioMixer { get; private set; }
+    public DropdownUI DDPrefab { get; private set; }
+    public ToggleUI TogglePrefab { get; private set; }
 
     #endregion
 

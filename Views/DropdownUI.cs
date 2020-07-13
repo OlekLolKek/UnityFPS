@@ -4,23 +4,45 @@ using UnityEngine.UI;
 
 public class DropdownUI : MonoBehaviour, IControl
 {
-    #region Properties
+    #region Fields
 
-    public Text GetText { get; private set; }
-    public Dropdown GetControl { get; private set; }
-    public GameObject Instance { get { return gameObject; } }
-    public Selectable Control { get { return GetControl; } }
+    private Text _text;
+    private Dropdown _control;
 
     #endregion
 
 
-    #region UnityMethods
+    #region Properties
 
-    private void Awake()
+    public Text GetText 
     {
-        GetText = transform.GetComponentInChildren<Text>();
-        GetControl = transform.GetComponentInChildren<Dropdown>();
+        get
+        {
+            if (!_text)
+            {
+                _text = transform.GetComponentInChildren<Text>();
+            }
+            return _text;
+        }
     }
+    public Dropdown GetControl
+    {
+        get
+        {
+            if (!_control)
+            {
+                _control = transform.GetComponentInChildren<Dropdown>();
+            }
+            return _control;
+        }
+    }
+    public GameObject Instance => gameObject;
+    public Selectable Control => GetControl;
+
+    #endregion
+
+
+    #region Methods
 
     public void Interactable(bool value)
     {

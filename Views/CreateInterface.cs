@@ -22,6 +22,12 @@ public class CreateInterface : MonoBehaviour
         Clear();
     }
 
+    public void CreateSettingsMenu()
+    {
+        CreateComponent();
+        gameObject.AddComponent<OptionsMenu>();
+    }
+
     private void Clear()
     {
         DestroyImmediate(this);

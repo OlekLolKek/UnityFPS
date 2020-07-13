@@ -53,7 +53,7 @@
     </string>
 
     <string id="SoftParticles">
-      <text>Частицы</text>
+      <text>Мягкие Частицы</text>
     </string>
 
     <string id="ShadowQuality">
@@ -62,6 +62,26 @@
 
     <string id="SaveAndReturn">
       <text>Сохранить и выйти</text>
+    </string>
+
+    <string id="Back">
+      <text>Назад</text>
+    </string>
+
+  </group>
+
+  <group id="ShadowsOptions">
+
+    <string id="Disable">
+      <text>Отключить тени</text>
+    </string>
+
+    <string id="Hard">
+      <text>Жёсткие тени</text>
+    </string>
+
+    <string id="HardAndSoft">
+      <text>Все тени</text>
     </string>
 
   </group>

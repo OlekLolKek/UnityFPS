@@ -4,23 +4,40 @@ using UnityEngine;
 
 public class ToggleUI : MonoBehaviour, IControl
 {
-    #region Properties
+    #region Fields
 
-    public Text GetText { get; private set; }   
-    public Toggle GetControl { get; private set; }
-    public GameObject Instance { get { return gameObject; } }
-    public Selectable Control { get { return GetControl; } }
+    private Text _text;
+    private Toggle _control;
 
     #endregion
 
 
-    #region UnityMethods
+    #region Properties
 
-    private void Awake()
-    {
-        GetControl = GetComponent<Toggle>();
-        GetText = transform.GetComponentInChildren<Text>();
+    public Text GetText 
+    { 
+        get
+        {
+            if (!_text)
+            {
+                _text = GetComponentInChildren<Text>();
+            }
+            return _text;
+        }
+    } 
+    public Toggle GetControl 
+    { 
+        get
+        {
+            if (!_control)
+            {
+                _control = GetComponentInChildren<Toggle>();
+            }
+            return _control;
+        }
     }
+    public GameObject Instance => gameObject;
+    public Selectable Control => GetControl;
 
     #endregion
 

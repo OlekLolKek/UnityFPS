@@ -39,8 +39,7 @@ public abstract class BaseMenu : MonoBehaviour
     protected T CreateControl<T>(T prefab, string text) where T : Object, IControlText
     {
         if (!prefab) throw new Exception(string.Format($"Отсутствует ссылка на {typeof(T)}"));
-        var tempControl = Instantiate(prefab, _interface.InterfaceResources.MainPanel.transform.position, Quaternion.identity,
-            _interface.InterfaceResources.MainPanel.transform);
+        var tempControl = Instantiate(prefab, _interface.InterfaceResources.MainPanel.transform.position, Quaternion.identity, _interface.InterfaceResources.MainPanel.transform);
 
         if (tempControl.GetText != null)
         {
