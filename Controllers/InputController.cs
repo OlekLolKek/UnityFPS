@@ -5,8 +5,11 @@ public sealed class InputController : BaseController, IExecute
 {
     #region Fields
 
+    public bool IsGamePaused = false;
+
+    private KeyCode _pauseButton = KeyCode.Escape;
     private KeyCode _switchFlashlight = KeyCode.F;
-    private KeyCode _cancel = KeyCode.Escape;
+    private KeyCode _cancel = KeyCode.X;
     private KeyCode _reloadMag = KeyCode.R;
     private KeyCode _switchShootingMode = KeyCode.B;
     private KeyCode _savePlayer = KeyCode.C;
@@ -32,93 +35,102 @@ public sealed class InputController : BaseController, IExecute
     public void Execute()
     {
         if (!IsActive) return;
-        if (Input.GetKeyDown(_switchFlashlight))
+
+        if (Input.GetKeyDown(_pauseButton))
         {
-            ServiceLocator.Resolve<FlashlightController>().Switch(ServiceLocator.Resolve<Inventory>().Flashlight);
+            ServiceLocator.Resolve<PauseController>().Pause();
         }
 
-        if (Input.GetKeyDown(_savePlayer))
+        if (!IsGamePaused)
         {
-            ServiceLocator.Resolve<SaveDataRepository>().Save();
-        }
-
-        if (Input.GetKeyDown(_loadPlayer))
-        {
-            ServiceLocator.Resolve<SaveDataRepository>().Load();
-        }
-
-        if (Input.GetKeyDown(_screenshot))
-        {
-            ServiceLocator.Resolve<PhotoController>().SecondMethod();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            SelectWeapon(0);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            SelectWeapon(1);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            SelectWeapon(2);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            SelectWeapon(3);
-        }
-
-        if (Input.GetAxis("Mouse ScrollWheel") > 0)
-        {
-            NextWeapon();
-        }
-
-        if (Input.GetAxis("Mouse ScrollWheel") < 0)
-        {
-            PreviousWeapon();
-        }
-
-        if (Input.GetKeyDown(_switchShootingMode))
-        {
-            if (ServiceLocator.Resolve<WeaponController>().IsActive)
+            if (Input.GetKeyDown(_switchFlashlight))
             {
-                ServiceLocator.Resolve<WeaponController>().SwitchMode();
+                ServiceLocator.Resolve<FlashlightController>().Switch(ServiceLocator.Resolve<Inventory>().Flashlight);
             }
-        }
 
-        if (ServiceLocator.Resolve<WeaponController>().IsActive)
-        {
-            if (ServiceLocator.Resolve<WeaponController>().IsInAutomaticMode())
+            if (Input.GetKeyDown(_savePlayer))
             {
-                if (Input.GetMouseButton(_mouseButton))
+                ServiceLocator.Resolve<SaveDataRepository>().Save();
+            }
+
+            if (Input.GetKeyDown(_loadPlayer))
+            {
+                ServiceLocator.Resolve<SaveDataRepository>().Load();
+            }
+
+            if (Input.GetKeyDown(_screenshot))
+            {
+                ServiceLocator.Resolve<PhotoController>().SecondMethod();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                SelectWeapon(0);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                SelectWeapon(1);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                SelectWeapon(2);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                SelectWeapon(3);
+            }
+
+            if (Input.GetAxis("Mouse ScrollWheel") > 0)
+            {
+                NextWeapon();
+            }
+
+            if (Input.GetAxis("Mouse ScrollWheel") < 0)
+            {
+                PreviousWeapon();
+            }
+
+            if (Input.GetKeyDown(_switchShootingMode))
+            {
+                if (ServiceLocator.Resolve<WeaponController>().IsActive)
                 {
-                    ServiceLocator.Resolve<WeaponController>().Fire();
+                    ServiceLocator.Resolve<WeaponController>().SwitchMode();
                 }
             }
-            else
+
+            if (Input.GetKeyDown(_cancel))
             {
-                if (Input.GetMouseButtonDown(_mouseButton))
+                ServiceLocator.Resolve<WeaponController>().Off();
+                ServiceLocator.Resolve<FlashlightController>().Off();
+            }
+
+            if (Input.GetKeyDown(_reloadMag))
+            {
+                if (ServiceLocator.Resolve<WeaponController>().IsActive)
                 {
-                    ServiceLocator.Resolve<WeaponController>().Fire();
+                    ServiceLocator.Resolve<WeaponController>().ReloadMag();
                 }
             }
-        }
 
-        if (Input.GetKeyDown(_cancel))
-        {
-            ServiceLocator.Resolve<WeaponController>().Off();
-            ServiceLocator.Resolve<FlashlightController>().Off();
-        }
-
-        if (Input.GetKeyDown(_reloadMag))
-        {
             if (ServiceLocator.Resolve<WeaponController>().IsActive)
             {
-                ServiceLocator.Resolve<WeaponController>().ReloadMag();
+                if (ServiceLocator.Resolve<WeaponController>().IsInAutomaticMode())
+                {
+                    if (Input.GetMouseButton(_mouseButton))
+                    {
+                        ServiceLocator.Resolve<WeaponController>().Fire();
+                    }
+                }
+                else
+                {
+                    if (Input.GetMouseButtonDown(_mouseButton))
+                    {
+                        ServiceLocator.Resolve<WeaponController>().Fire();
+                    }
+                }
             }
         }
     }

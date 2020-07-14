@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Settings>
+
+  <meta>
+    <Name>Oleg</Name>
+    <language>Russian</language>
+  </meta>
+
+  <group id="MainMenuItems">
+
+    <string id="NewGame">
+      <text>Новая игра</text>
+    </string>
+
+    <string id="Continue">
+      <text>Продолжить</text>
+    </string>
+
+    <string id="Options">
+      <text>Настройки</text>
+    </string>
+
+    <string id="Quit">
+      <text>Выход</text>
+    </string>
+
+  </group>
+
+  <group id="OptionsMenuItems">
+
+    <string id="Video">
+      <text>Графика</text>
+    </string>
+
+    <string id="Sound">
+      <text>Звук</text>
+    </string>
+
+    <string id="Game">
+      <text>Игра</text>
+    </string>
+
+    <string id="Back">
+      <text>Назад</text>
+    </string>
+
+  </group>
+
+  <group id="VideoOptionsMenuItems">
+
+    <string id="CurrentName">
+      <text>Имя</text>
+    </string>
+
+    <string id="SoftParticles">
+      <text>Мягкие Частицы</text>
+    </string>
+
+    <string id="ShadowQuality">
+      <text>Качество теней</text>
+    </string>
+
+    <string id="SaveAndReturn">
+      <text>Сохранить и выйти</text>
+    </string>
+
+    <string id="Back">
+      <text>Назад</text>
+    </string>
+
+  </group>
+
+  <group id="ShadowsOptions">
+
+    <string id="Disable">
+      <text>Отключить тени</text>
+    </string>
+
+    <string id="Hard">
+      <text>Жёсткие тени</text>
+    </string>
+
+    <string id="HardAndSoft">
+      <text>Все тени</text>
+    </string>
+
+  </group>
+
+</Settings>

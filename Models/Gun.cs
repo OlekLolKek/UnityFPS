@@ -1,4 +1,7 @@
-﻿public class Gun : Weapon
+﻿using UnityEngine;
+
+
+public class Gun : Weapon
 {
     #region Methods
 
@@ -13,6 +16,8 @@
         Magazine.CountAmmunition--;
         _isReady = false;
         _timeRemaining.AddTimeRemaining();
+        StartCoroutine(Flash());
+        Debug.Log("Свет включился");
     }
 
     #endregion

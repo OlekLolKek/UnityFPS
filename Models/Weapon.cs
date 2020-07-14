@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -12,14 +13,17 @@ public abstract class Weapon : BaseObjectScene
 
     public AmmunitionType[] AmmunitionTypes = { AmmunitionType.Bullet };
 
-    [SerializeField] Quaternion _bulletRotationMin;
-    [SerializeField] Quaternion _bulletRotationMax;
+    [SerializeField] private Quaternion _bulletRotationMin;
+    [SerializeField] private Quaternion _bulletRotationMax;
 
     [SerializeField] protected AudioClipPlayable _shotClip;
     [SerializeField] protected Transform _barrel;
+    [SerializeField] protected Light _muzzleFlash;
     [SerializeField] protected AudioSource _audioSource;
     [SerializeField] protected float _force = 999.0f;
+    [SerializeField] protected float _muzzleFlashTime = 0.025f;
     [SerializeField] protected float _rechargeTime = 0.2f;
+    [SerializeField] protected float _reloadTime = 1.0f;
     [SerializeField] protected int _magSize = 30;
     [SerializeField] protected int _countMag = 5;
     [SerializeField] protected bool _isSwitchable = true;
@@ -30,6 +34,7 @@ public abstract class Weapon : BaseObjectScene
 
     protected bool _isReady = true;
     protected ITimeRemaining _timeRemaining;
+    protected ITimeRemaining _reloadTimeRemaining;
 
     #endregion
 
@@ -49,12 +54,15 @@ public abstract class Weapon : BaseObjectScene
     private void Start()
     {
         _timeRemaining = new TimeRemaining(ReadyShoot, _rechargeTime);
+        _reloadTimeRemaining = new TimeRemaining(ReadyShoot, _reloadTime);
+        _muzzleFlash = GetComponentInChildren<Light>();
         for (var i = 0; i < _countMag; i++)
         {
             AddMag(new Magazine { CountAmmunition = _magSize });
         }
 
         ReloadMag();
+        _isReady = true;
     }
 
     public abstract void Fire();
@@ -62,6 +70,18 @@ public abstract class Weapon : BaseObjectScene
     protected void ReadyShoot()
     {
         _isReady = true;
+        if (_muzzleFlash != null)
+        {
+            _muzzleFlash.enabled = false;
+            Debug.Log("Свет выключился");
+        }
+    }
+
+    protected IEnumerator Flash()
+    {
+        _muzzleFlash.enabled = true;
+        yield return new WaitForSeconds(_muzzleFlashTime);
+        _muzzleFlash.enabled = false;
     }
 
     protected void AddMag(Magazine mag)
@@ -81,6 +101,8 @@ public abstract class Weapon : BaseObjectScene
     public void ReloadMag()
     {
         if (CountMag <= 0) return;
+        _isReady = false;
+        _reloadTimeRemaining.AddTimeRemaining();
         Magazine = _mags.Dequeue();
     }
 

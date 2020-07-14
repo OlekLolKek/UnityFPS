@@ -6,8 +6,8 @@ public sealed class Vision
 {
     #region Fields
 
-    public float ActiveDis = 10;
-    public float ActiveAng = 35;
+    public float ActiveDis = 15;
+    public float ActiveAng = 90;
 
     #endregion
 
@@ -16,6 +16,7 @@ public sealed class Vision
 
     public bool VisionM(Transform player, Transform target)
     {
+        Debug.Log($"Distance {Distance(player, target)} Angle {Angle(player, target)}, CheckBlocked {CheckBlocked(player, target)}");
         return Distance(player, target) && Angle(player, target) && !CheckBlocked(player, target);
     }
 
@@ -28,6 +29,8 @@ public sealed class Vision
     private bool Angle(Transform player, Transform target)
     {
         var angle = Vector3.Angle(target.position - player.position, player.forward);
+        Debug.Log("УГОЛ " + angle);
+        Debug.Log("АКТИВНЫЙ УГОЛ " + ActiveAng);
         return angle <= ActiveAng;
     }
 

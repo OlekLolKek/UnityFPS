@@ -29,6 +29,7 @@ public sealed class Controllers : IInitialization
         ServiceLocator.SetService(new BotController());
         ServiceLocator.SetService(new SaveDataRepository());
         ServiceLocator.SetService(new PhotoController());
+        ServiceLocator.SetService(new PauseController());
 
         _executeControllers = new IExecute[6];
 
@@ -60,11 +61,18 @@ public sealed class Controllers : IInitialization
             }
         }
 
+        ServiceLocator.Resolve<PauseController>().Initialization();
         ServiceLocator.Resolve<Inventory>().Initialization();
         ServiceLocator.Resolve<SelectionController>().On();
         ServiceLocator.Resolve<PlayerController>().On();
         ServiceLocator.Resolve<InputController>().On();
         ServiceLocator.Resolve<BotController>().On();
+    }
+
+    private void Cleanup()
+    {
+        ServiceLocator.Cleanup();
+        ServiceLocatorMonoBehaviour.Cleanup();
     }
 
     #endregion

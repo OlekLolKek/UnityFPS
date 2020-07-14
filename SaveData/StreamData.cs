@@ -37,5 +37,10 @@ public sealed class StreamData : IData<SerializableGameObject>
         return result;
     }
 
+    public void SetOptions(string path)
+    {
+        throw new NotImplementedException();
+    }
+
     #endregion
 }

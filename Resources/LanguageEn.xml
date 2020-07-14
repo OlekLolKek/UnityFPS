@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Settings>
+
+  <meta>
+    <Name>Oleg</Name>
+    <language>English</language>
+  </meta>
+
+  <group id="MainMenuItems">
+
+    <string id="NewGame">
+      <text>New Game</text>
+    </string>
+
+    <string id="Continue">
+      <text>Continue</text>
+    </string>
+
+    <string id="Options">
+      <text>Settings</text>
+    </string>
+
+    <string id="Quit">
+      <text>Exit</text>
+    </string>
+
+  </group>
+
+  <group id="OptionsMenuItems">
+
+    <string id="Video">
+      <text>Video</text>
+    </string>
+
+    <string id="Sound">
+      <text>Sound</text>
+    </string>
+
+    <string id="Game">
+      <text>Game</text>
+    </string>
+
+    <string id="Back">
+      <text>Back</text>
+    </string>
+
+  </group>
+
+  <group id="VideoOptionsMenuItems">
+
+    <string id="CurrentName">
+      <text>Current</text>
+    </string>
+
+    <string id="SoftParticles">
+      <text>Soft Particles</text>
+    </string>
+
+    <string id="ShadowQuality">
+      <text>Shadow Quality</text>
+    </string>
+
+    <string id="SaveAndReturn">
+      <text>Save and return</text>
+    </string>
+
+    <string id="Back">
+      <text>Return</text>
+    </string>
+
+  </group>
+
+  <group id="ShadowsOptions">
+
+    <string id="Disable">
+      <text>Disable Shadows</text>
+    </string>
+
+    <string id="Hard">
+      <text>Hard shadows</text>
+    </string>
+
+    <string id="HardAndSoft">
+      <text>Hard and soft shadows</text>
+    </string>
+
+  </group>
+
+</Settings>

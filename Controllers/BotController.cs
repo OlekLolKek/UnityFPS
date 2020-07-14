@@ -7,7 +7,7 @@ public class BotController : BaseController, IExecute, IInitialization
 {
     #region Fields
 
-    private readonly int _countBot = 5;
+    private readonly int _countBot = 1;
     private readonly List<Bot> _botList = new List<Bot>();
 
     #endregion
@@ -17,17 +17,20 @@ public class BotController : BaseController, IExecute, IInitialization
 
     public void Initialization()
     {
-        for (var index = 0; index < _countBot; index++)
+        if (ServiceLocatorMonoBehaviour.GetService<Reference>().Bot != null)
         {
-            var tempBot = Object.Instantiate(ServiceLocatorMonoBehaviour.GetService<Reference>().Bot,
-                Patrol.GenericPoint(ServiceLocatorMonoBehaviour.GetService<CharacterController>().transform),
-                Quaternion.identity);
+            for (var index = 0; index < _countBot; index++)
+            {
+                var tempBot = Object.Instantiate(ServiceLocatorMonoBehaviour.GetService<Reference>().Bot,
+                    Patrol.GenericPoint(ServiceLocatorMonoBehaviour.GetService<CharacterController>().transform),
+                    Quaternion.identity);
 
-            tempBot.Agent.avoidancePriority = index;
-            tempBot.Target = ServiceLocatorMonoBehaviour.GetService<CharacterController>().transform;
-            //todo разных протинвиков
-            AddBotToList(tempBot);
-        }
+                tempBot.Agent.avoidancePriority = index;
+                tempBot.Target = ServiceLocatorMonoBehaviour.GetService<CharacterController>().transform;
+                //todo разных протинвиков
+                AddBotToList(tempBot);
+            }
+        } 
     }
 
     public void AddBotToList(Bot bot)
