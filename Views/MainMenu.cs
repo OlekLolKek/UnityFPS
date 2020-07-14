@@ -21,7 +21,12 @@ public sealed class MainMenu : BaseMenu
     private void Start()
     {
         _buttonStartGame.GetText.text = LangManager.Instance.Text("MainMenuItems", "NewGame");
-        _buttonStartGame.GetControl.onClick.AddListener(delegate { LoadNewGame(SceneManagerHelper.Instance.Scenes.Game.SceneAsset.name); });
+        _buttonStartGame.GetControl.onClick.AddListener(delegate { LoadNewGame(1); });
+        Debug.Log(SceneManagerHelper.Instance);
+        Debug.Log(SceneManagerHelper.Instance.Scenes);
+        Debug.Log(SceneManagerHelper.Instance.Scenes.Game);
+        Debug.Log(SceneManagerHelper.Instance.Scenes.Game.SceneAsset);
+        //Debug.Log(SceneManagerHelper.Instance.Scenes.Game.SceneAsset.name);
 
         _buttonContinue.GetText.text = LangManager.Instance.Text("MainMenuItems", "Continue");
         _buttonContinue.SetInteractible(false);
@@ -57,7 +62,18 @@ public sealed class MainMenu : BaseMenu
         _interface.Execute(InterfaceObject.OptionsMenu);
     }
 
+    private void LoadNewGame(int lvl)
+    {
+        _interface.LoadSceneAsync(lvl);
+    }
+
     private void LoadNewGame(string lvl)
+    {
+        //SceneManager.sceneLoaded += SceneManagerOnSceneLoaded;
+        _interface.LoadSceneAsync(lvl);
+    }
+
+    private void LoadNewGame(Scene lvl)
     {
         //SceneManager.sceneLoaded += SceneManagerOnSceneLoaded;
         _interface.LoadSceneAsync(lvl);

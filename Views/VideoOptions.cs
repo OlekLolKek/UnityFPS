@@ -1,10 +1,7 @@
 ﻿using UnityEngine.EventSystems;
 using UnityEngine;
-using TMPro;
-using System.Windows.Markup;
-using System.Linq;
 using System.Collections.Generic;
-using UnityEngine.Events;
+
 
 public class VideoOptions : BaseMenu
 {
@@ -58,17 +55,16 @@ public class VideoOptions : BaseMenu
             {
                 case (int)VideoOptionsMenuItems.CurrentName:
                     {
-                        Debug.Log("case CurrentName");
                         _currentVideoSettingsDD.GetControl.ClearOptions();
                         _currentVideoSettingsDD.GetControl.AddOptions(new List<string>(QualitySettings.names));
-                        _currentVideoSettingsDD.GetControl.onValueChanged.AddListener(SetSettings);
-                        SetSettings(QualitySettings.GetQualityLevel());
+                        _currentVideoSettingsDD.GetControl.onValueChanged.AddListener(Call);
+                        //SetSettings(QualitySettings.GetQualityLevel());
+                        Call(QualitySettings.GetQualityLevel());
                         _elementsOfInterface[i] = _currentVideoSettingsDD;
                         break;
                     }
                 case (int)VideoOptionsMenuItems.SoftParticles:
                     {
-                        Debug.Log("case Particles");
                         _softParticlesToggle.GetText.text = LangManager.Instance.Text("VideoOptionsMenuItems", "SoftParticles");
                         _softParticlesToggle.GetControl.onValueChanged.AddListener(SoftParticles);
                         _elementsOfInterface[i] = _softParticlesToggle;
@@ -76,7 +72,6 @@ public class VideoOptions : BaseMenu
                     }
                 case (int)VideoOptionsMenuItems.ShadowQuality:
                     {
-                        Debug.Log("case Shadow");
                         _shadowQualityDD.GetControl.ClearOptions();
                         List<string> shadowLevels = new List<string>
                         {
@@ -91,7 +86,6 @@ public class VideoOptions : BaseMenu
                     }
                 case (int)VideoOptionsMenuItems.SaveAndReturn:
                     {
-                        Debug.Log("case Save&return");
                         _saveAndReturnButton.GetText.text = LangManager.Instance.Text("VideoOptionsMenuItems", "SaveAndReturn");
                         _saveAndReturnButton.GetControl.onClick.AddListener(SaveAndReturn);
                         _elementsOfInterface[i] = _saveAndReturnButton;
@@ -99,7 +93,6 @@ public class VideoOptions : BaseMenu
                     }
                 case (int)VideoOptionsMenuItems.Back:
                     {
-                        Debug.Log("case Back");
                         _backButton.GetText.text = LangManager.Instance.Text("VideoOptionsMenuItems", "Back");
                         _backButton.GetControl.onClick.AddListener(Back);
                         _elementsOfInterface[i] = _backButton;
@@ -146,7 +139,6 @@ public class VideoOptions : BaseMenu
             {
                 var temp = control as DropdownUI;
                 temp.GetControl.value = (int)QualitySettings.shadows;
-                Debug.Log((int)QualitySettings.shadows);
                 temp.GetControl.RefreshShownValue();
             }
         }
@@ -169,6 +161,7 @@ public class VideoOptions : BaseMenu
 
     private void SaveAndReturn()
     {
+        Debug.Log("SaveAndReturn button pressed");
         ApplySettings();
         VideoSettingsRepository.VideoSettings = _videoSettings;
         VideoSettingsRepository.SaveData();
@@ -178,6 +171,7 @@ public class VideoOptions : BaseMenu
 
     private void Back()
     {
+        Debug.Log("Back button pressed");
         Hide();
         _interface.Execute(InterfaceObject.OptionsMenu);
     }
@@ -204,8 +198,11 @@ public class VideoOptions : BaseMenu
     {
         Save();
         QualitySettings.softParticles = VideoSettings.Items[_selectSettings].SoftParticles;
+        Debug.Log("Качество после первого: " + QualitySettings.GetQualityLevel());
         QualitySettings.shadows = VideoSettings.Items[_selectSettings].ShadowQuality;
-        QualitySettings.SetQualityLevel(_selectSettings, true);
+        Debug.Log("Качество после второго: " + QualitySettings.GetQualityLevel());
+        QualitySettings.SetQualityLevel(_selectSettings);
+        Debug.Log("Качество после третьего: " + QualitySettings.GetQualityLevel());
     }
 
     /// <summary>
@@ -220,19 +217,24 @@ public class VideoOptions : BaseMenu
             var videoSettingsItems = videoSettings.Items[_selectSettings];
             if (control.Instance.name == VideoOptionsMenuItems.SoftParticles.ToString() && control is ToggleUI)
             {
+                Debug.Log("Применяются частицы");
                 videoSettingsItems.SoftParticles = (control as ToggleUI).GetControl.isOn;
             }
             else if (control.Instance.name == VideoOptionsMenuItems.ShadowQuality.ToString() && control is DropdownUI)
             {
+                Debug.Log("Применяются ntyb");
                 videoSettingsItems.ShadowQuality = (ShadowQuality)(control as DropdownUI).GetControl.value;
             }
             else if (control.Instance.name == VideoOptionsMenuItems.CurrentName.ToString() && control is DropdownUI)
             {
+                Debug.Log("Применяются настройки");
                 VideoSettings.CurrentSettings = (control as DropdownUI).GetControl.value;
             }
             videoSettings.Items[_selectSettings] = videoSettingsItems;
             _videoSettings = videoSettings;
+            Debug.Log(QualitySettings.GetQualityLevel());
         }
+        Debug.Log("Качество после цикла: " + QualitySettings.GetQualityLevel());
     }
 
     #endregion
